@@ -16,9 +16,9 @@ fun ConvertScreen(
     modifier: Modifier,
     navHostController: NavHostController,
     unitViewModel: UnitViewModel,
-    coroutineScope: CoroutineScope
+    coroutineScope: CoroutineScope,
 ) {
-    Column(modifier = modifier.fillMaxSize()) {
+    ConstraintLayout(modifier = modifier.fillMaxSize()) {
         Text(
             text = "Main screen",
             fontSize = 28.sp
