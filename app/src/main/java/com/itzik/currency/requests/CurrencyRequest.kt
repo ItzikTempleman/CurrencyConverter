@@ -1,5 +1,6 @@
 package com.itzik.currency.requests
 
+import com.itzik.currency.models.CurrencyDropdownItemResponse
 import com.itzik.currency.models.UnitResponse
 import retrofit2.Response
 import retrofit2.http.GET
@@ -13,4 +14,8 @@ interface CurrencyRequest {
         @Path("targetUnit") targetUnit: String,
         @Path("amount") amount: Double,
     ): Response<UnitResponse>
+
+
+    @GET("currencies")
+    suspend fun getCurrencyList(): Response<CurrencyDropdownItemResponse>
 }
