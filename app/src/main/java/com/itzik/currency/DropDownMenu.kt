@@ -39,15 +39,17 @@ fun DropdownMenuBox(
     currencyViewModel: CurrencyViewModel,
     coroutineScope: CoroutineScope,
     text: String,
-    //savedCurrencyValue:String
 ) {
-    var savedCurrencyValue by remember { mutableStateOf("") }
-    var expanded by remember { mutableStateOf(false) }
+    var shortCurrencyName by remember { mutableStateOf("") }
+    var fullCurrencyName by remember { mutableStateOf("") }
+    var bothCurrencyNames by remember { mutableStateOf("") }
+
+
+    var isExpanded by remember { mutableStateOf(false) }
     val list = getCurrencyNames
-    var selectedItem by remember { mutableStateOf("") }
     var textFiledSize by remember { mutableStateOf(Size.Zero) }
 
-    val icon = if (expanded) {
+    val icon = if (isExpanded) {
         Icons.Filled.KeyboardArrowUp
     } else {
         Icons.Filled.KeyboardArrowDown
@@ -55,9 +57,9 @@ fun DropdownMenuBox(
     Column(modifier = modifier) {
         OutlinedTextField(
             textStyle = TextStyle(fontSize = 24.sp),
-            value = selectedItem,
+            value = fullCurrencyName,
             onValueChange = {
-                selectedItem = it
+                fullCurrencyName = it
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -72,7 +74,7 @@ fun DropdownMenuBox(
             },
             trailingIcon = {
                 Icon(icon, "", Modifier.clickable {
-                    expanded = !expanded
+                    isExpanded = !isExpanded
                 })
             },
             colors = TextFieldDefaults.textFieldColors(
@@ -86,22 +88,29 @@ fun DropdownMenuBox(
             )
         )
         DropdownMenu(
-            expanded = expanded,
+            expanded = isExpanded,
             onDismissRequest = {
-                expanded = false
+                isExpanded = false
             }, modifier = Modifier
                 .width(with(LocalDensity.current) {
                     textFiledSize.width.toDp()
                 })
         ) {
-            list.forEach { label ->
+            list.forEach {
                 DropdownMenuItem(onClick = {
-                    selectedItem = label.toString()
-                    expanded = false
+                    Log.d("TAG", "it $it")
+
+                    fullCurrencyName = it.second
+                    shortCurrencyName = it.first
+
+                    isExpanded = false
                 }) {
-                    Text(text = label.toString())
-                    savedCurrencyValue=label.first
-                    Log.d("TAG", "savedCurrencyValue: $savedCurrencyValue")
+
+                    bothCurrencyNames = it.toString()
+                    Text(text = bothCurrencyNames)
+
+                    currencyViewModel.shareInitialAndTargetCurrencyType(shortCurrencyName)
+
                 }
             }
         }

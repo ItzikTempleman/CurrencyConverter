@@ -68,7 +68,7 @@ fun ConvertScreen(
                     end.linkTo(parent.end)
                     top.linkTo(logo.bottom)
                 }
-                .padding(horizontal = 12.dp),
+                .padding(vertical = 2.dp, horizontal = 12.dp),
             currencyViewModel = currencyViewModel,
             coroutineScope = coroutineScope,
             text = stringResource(id = R.string.initial_currency)
@@ -80,7 +80,7 @@ fun ConvertScreen(
                     end.linkTo(parent.end)
                     top.linkTo(chooseCurrencyDropDown.bottom)
                 }
-                .padding(horizontal = 12.dp),
+                .padding(vertical = 2.dp,horizontal = 12.dp),
             currencyViewModel = currencyViewModel,
             coroutineScope = coroutineScope,
             text = stringResource(id = R.string.target_currency)
