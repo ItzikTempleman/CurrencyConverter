@@ -35,7 +35,7 @@ fun ReverseValues(
         shape = RoundedCornerShape(80.dp),
     ) {
         Icon(
-            Icons.Filled.SwapVert,
+            painter = painterResource(id = R.drawable.swapvert),
             contentDescription = null,
             tint = Color.Red
         )

@@ -1,6 +1,7 @@
 package com.itzik.currency
 
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,7 +25,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import com.itzik.currency.constants.getCurrencyNames
@@ -36,9 +37,11 @@ import kotlinx.coroutines.CoroutineScope
 fun DropdownMenuBox(
     modifier: Modifier,
     currencyViewModel: CurrencyViewModel,
-    coroutineScope: CoroutineScope
+    coroutineScope: CoroutineScope,
+    text: String,
+    //savedCurrencyValue:String
 ) {
-
+    var savedCurrencyValue by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
     val list = getCurrencyNames
     var selectedItem by remember { mutableStateOf("") }
@@ -51,6 +54,7 @@ fun DropdownMenuBox(
     }
     Column(modifier = modifier) {
         OutlinedTextField(
+            textStyle = TextStyle(fontSize = 24.sp),
             value = selectedItem,
             onValueChange = {
                 selectedItem = it
@@ -62,7 +66,7 @@ fun DropdownMenuBox(
                 },
             label = {
                 Text(
-                    text = stringResource(id = R.string.select_currency),
+                    text = text,
                     fontSize = 24.sp
                 )
             },
@@ -96,6 +100,8 @@ fun DropdownMenuBox(
                     expanded = false
                 }) {
                     Text(text = label.toString())
+                    savedCurrencyValue=label.first
+                    Log.d("TAG", "savedCurrencyValue: $savedCurrencyValue")
                 }
             }
         }

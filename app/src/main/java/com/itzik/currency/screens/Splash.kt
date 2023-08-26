@@ -22,30 +22,12 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(navHostController: NavHostController) {
-    var startAnimation by remember {
-        mutableStateOf(false)
-    }
 
-    val alphaAnim = animateFloatAsState(
-        targetValue = if (startAnimation) 1f else 0f,
-        animationSpec = tween(
-            durationMillis = 1000
-        )
-    )
     LaunchedEffect(key1 = true) {
-        startAnimation = true
-        delay(2000)
+
+        delay(0)
         navHostController.popBackStack()
         navHostController.navigate(HomeGraph.HomeScreen.route)
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        Text(
-            text = "Slash screen",
-            fontSize = 28.sp
-        )
-    }
 }

@@ -47,14 +47,16 @@ fun ConvertScreen(
     var targetValue by remember { mutableStateOf("0") }
 
     ConstraintLayout(modifier = modifier.fillMaxSize()) {
-        val (logo, chooseCurrencyDropDown, amountTF, valueText, reverseIcon) = createRefs()
+        val (logo, chooseCurrencyDropDown,targetCurrencyDropDown, amountTF, valueText, reverseIcon) = createRefs()
 
         Image(
-            modifier = Modifier.constrainAs(logo) {
-                top.linkTo(parent.top)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }.padding(50.dp),
+            modifier = Modifier
+                .constrainAs(logo) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+                .padding(50.dp),
             painter = painterResource(id = R.drawable.logo),
             contentDescription = "",
             )
@@ -65,11 +67,24 @@ fun ConvertScreen(
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     top.linkTo(logo.bottom)
-                }.padding(12.dp),
+                }
+                .padding(horizontal = 12.dp),
             currencyViewModel = currencyViewModel,
-            coroutineScope = coroutineScope
+            coroutineScope = coroutineScope,
+            text = stringResource(id = R.string.initial_currency)
         )
-
+        DropdownMenuBox(
+            modifier = Modifier
+                .constrainAs(targetCurrencyDropDown) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    top.linkTo(chooseCurrencyDropDown.bottom)
+                }
+                .padding(horizontal = 12.dp),
+            currencyViewModel = currencyViewModel,
+            coroutineScope = coroutineScope,
+            text = stringResource(id = R.string.target_currency)
+        )
 
 
         OutlinedTextField(
@@ -77,9 +92,9 @@ fun ConvertScreen(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier
                 .constrainAs(amountTF) {
-                    top.linkTo(chooseCurrencyDropDown.bottom)
+                    top.linkTo(targetCurrencyDropDown.bottom)
                 }
-                .padding(12.dp)
+                .padding(horizontal = 12.dp, vertical = 24.dp)
                 .fillMaxWidth(),
             value = haveInitialValue,
             onValueChange = {
@@ -118,7 +133,8 @@ fun ConvertScreen(
                     end.linkTo(amountTF.end)
                 }
                 .width(390.dp)
-                .padding(start = 24.dp, top=8.dp, bottom = 8.dp).height(40.dp),
+                .padding(start = 24.dp, top = 8.dp, bottom = 8.dp)
+                .height(40.dp),
             text = "Value: $targetValue",
             color = Color.White,
             fontSize = 24.sp
@@ -127,11 +143,11 @@ fun ConvertScreen(
         ReverseValues(
             modifier = Modifier
                 .constrainAs(reverseIcon) {
-                    top.linkTo(amountTF.top)
-                    end.linkTo(amountTF.end)
-                    bottom.linkTo(valueText.bottom)
+                    top.linkTo(chooseCurrencyDropDown.top)
+                    end.linkTo(targetCurrencyDropDown.end)
+                    bottom.linkTo(targetCurrencyDropDown.bottom)
                 }
-                .padding(end = 30.dp),
+                .padding(end = 70.dp),
             currencyViewModel = currencyViewModel,
             coroutineScope = coroutineScope
         )
