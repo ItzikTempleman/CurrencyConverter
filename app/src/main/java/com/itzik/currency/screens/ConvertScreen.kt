@@ -55,34 +55,27 @@ fun ConvertScreen(
     currencyViewModel: CurrencyViewModel,
     coroutineScope: CoroutineScope,
 ) {
-
-
     var initialShortCurrencyName by remember { mutableStateOf("") }
     var initialFullCurrencyName by remember { mutableStateOf("") }
     var initialBothCurrencyNames by remember { mutableStateOf("") }
     var isInitialTFExpanded by remember { mutableStateOf(false) }
-
 
     var targetShortCurrencyName by remember { mutableStateOf("") }
     var targetFullCurrencyName by remember { mutableStateOf("") }
     var targetBothCurrencyNames by remember { mutableStateOf("") }
     var isTargetTFExpanded by remember { mutableStateOf(false) }
 
-
     var initialValue by remember { mutableStateOf("") }
-    val targetValue by remember { mutableStateOf("0") }
+    val targetValue by remember { mutableStateOf("") }
     var textFiledSize by remember { mutableStateOf(Size.Zero) }
 
     val list = getCurrencyNames
-
 
     val icon = if (isInitialTFExpanded || isTargetTFExpanded) {
         Icons.Filled.KeyboardArrowUp
     } else {
         Icons.Filled.KeyboardArrowDown
     }
-
-
 
     ConstraintLayout(modifier = modifier.fillMaxSize()) {
         val (logo, initialCurrencyTF, targetCurrencyTF, amountTF, valueText, reverseIcon) = createRefs()
@@ -232,7 +225,6 @@ fun ConvertScreen(
                 }
             }
         }
-
 
         OutlinedTextField(
             singleLine = true,
