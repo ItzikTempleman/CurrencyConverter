@@ -5,12 +5,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.DropdownMenu
@@ -69,7 +69,6 @@ fun ConvertScreen(
     var isTargetTFExpanded by remember { mutableStateOf(false) }
 
 
-
     var initialValue by remember { mutableStateOf("") }
     val targetValue by remember { mutableStateOf("0") }
     var textFiledSize by remember { mutableStateOf(Size.Zero) }
@@ -86,7 +85,7 @@ fun ConvertScreen(
 
 
     ConstraintLayout(modifier = modifier.fillMaxSize()) {
-        val (logo, initialCurrencyTF, targetCurrencyTF, initialCurrencyDropDown, targetCurrencyDropDown, amountTF, valueText, reverseIcon) = createRefs()
+        val (logo, initialCurrencyTF, targetCurrencyTF, amountTF, valueText, reverseIcon) = createRefs()
 
         Image(
             modifier = Modifier
@@ -100,140 +99,139 @@ fun ConvertScreen(
             contentDescription = ""
         )
 
-
-        OutlinedTextField(
-            textStyle = TextStyle(fontSize = 24.sp),
-            value = initialFullCurrencyName,
-            onValueChange = {
-                initialFullCurrencyName = it
-            },
-            modifier = Modifier
-                .constrainAs(initialCurrencyTF) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    top.linkTo(logo.bottom)
-                }
-                .padding(vertical = 2.dp, horizontal = 12.dp)
-                .fillMaxWidth().onGloballyPositioned {
-                    textFiledSize = it.size.toSize()
-                },
-            label = {
-                Text(
-                    text = stringResource(id = R.string.initial_currency),
-                    fontSize = 24.sp
-                )
-            },
-            trailingIcon = {
-                Icon(icon, "", Modifier.clickable {
-                    isInitialTFExpanded = !isInitialTFExpanded
-                })
-            },
-            colors = TextFieldDefaults.textFieldColors(
-                cursorColor = Color.Black,
-                textColor = Color.Black,
-                backgroundColor = Color.Transparent,
-                focusedIndicatorColor = Color.Black,
-                unfocusedIndicatorColor = Color.Black,
-                disabledIndicatorColor = Color.Black,
-                focusedLabelColor = Color.Red
-            )
-        )
-
-        DropdownMenu(
-            expanded = isInitialTFExpanded,
-            onDismissRequest = {
-                isInitialTFExpanded = false
-            }, modifier = modifier.constrainAs(initialCurrencyDropDown){
-                top.linkTo(initialCurrencyTF.bottom)
+        Column(
+            modifier = modifier.constrainAs(initialCurrencyTF) {
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                top.linkTo(logo.bottom)
             }
-                .width(with(LocalDensity.current) {
-                    textFiledSize.width.toDp()
-                })
         ) {
-            list.forEach {
-                DropdownMenuItem(onClick = {
+            OutlinedTextField(
+                textStyle = TextStyle(fontSize = 24.sp),
+                value = initialFullCurrencyName,
+                onValueChange = {
+                    initialFullCurrencyName = it
+                },
+                modifier = Modifier
 
+                    .padding(vertical = 2.dp, horizontal = 12.dp)
+                    .fillMaxWidth()
+                    .onGloballyPositioned {
+                        textFiledSize = it.size.toSize()
+                    },
+                label = {
+                    Text(
+                        text = stringResource(id = R.string.initial_currency),
+                        fontSize = 24.sp
+                    )
+                },
+                trailingIcon = {
+                    Icon(icon, "", Modifier.clickable {
+                        isInitialTFExpanded = !isInitialTFExpanded
+                    })
+                },
+                colors = TextFieldDefaults.textFieldColors(
+                    cursorColor = Color.Black,
+                    textColor = Color.Black,
+                    backgroundColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Black,
+                    unfocusedIndicatorColor = Color.Black,
+                    disabledIndicatorColor = Color.Black,
+                    focusedLabelColor = Color.Red
+                )
+            )
 
-                    initialFullCurrencyName = it.second
-                    initialShortCurrencyName = it.first
-                    Log.d("TAG", "initialShortCurrencyName $initialShortCurrencyName")
+            DropdownMenu(
+                expanded = isInitialTFExpanded,
+                onDismissRequest = {
                     isInitialTFExpanded = false
-                }) {
+                }, modifier = modifier
+                    .width(with(LocalDensity.current) {
+                        textFiledSize.width.toDp()
+                    })
+            ) {
+                list.forEach {
+                    DropdownMenuItem(onClick = {
 
-                    initialBothCurrencyNames = it.toString()
-                    Text(text = initialBothCurrencyNames)
+
+                        initialFullCurrencyName = it.second
+                        initialShortCurrencyName = it.first
+                        Log.d("TAG", "initialShortCurrencyName $initialShortCurrencyName")
+                        isInitialTFExpanded = false
+                    }) {
+
+                        initialBothCurrencyNames = it.toString()
+                        Text(text = initialBothCurrencyNames)
 
 
+                    }
                 }
             }
         }
 
-        OutlinedTextField(
-            textStyle = TextStyle(fontSize = 24.sp),
-            value = targetFullCurrencyName,
-            onValueChange = {
-                targetFullCurrencyName = it
-            },
-            modifier = modifier
-                .constrainAs(targetCurrencyTF) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    top.linkTo(initialCurrencyTF.bottom)
-                }
-
-                .padding(vertical = 2.dp, horizontal = 12.dp)
-                .fillMaxWidth().onGloballyPositioned {
-                    textFiledSize = it.size.toSize()
+        Column(modifier = modifier.constrainAs(targetCurrencyTF) {
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+            top.linkTo(initialCurrencyTF.bottom)
+        }) {
+            OutlinedTextField(
+                textStyle = TextStyle(fontSize = 24.sp),
+                value = targetFullCurrencyName,
+                onValueChange = {
+                    targetFullCurrencyName = it
                 },
-            label = {
-                Text(
-                    text = stringResource(id = R.string.target_currency),
-                    fontSize = 24.sp
+                modifier = modifier
+                    .padding(vertical = 2.dp, horizontal = 12.dp)
+                    .fillMaxWidth()
+                    .onGloballyPositioned {
+                        textFiledSize = it.size.toSize()
+                    },
+                label = {
+                    Text(
+                        text = stringResource(id = R.string.target_currency),
+                        fontSize = 24.sp
+                    )
+                },
+                trailingIcon = {
+                    Icon(icon, "", Modifier.clickable {
+                        isTargetTFExpanded = !isTargetTFExpanded
+                    })
+                },
+                colors = TextFieldDefaults.textFieldColors(
+                    cursorColor = Color.Black,
+                    textColor = Color.Black,
+                    backgroundColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Black,
+                    unfocusedIndicatorColor = Color.Black,
+                    disabledIndicatorColor = Color.Black,
+                    focusedLabelColor = Color.Red
                 )
-            },
-            trailingIcon = {
-                Icon(icon, "", Modifier.clickable {
-                    isTargetTFExpanded = !isTargetTFExpanded
-                })
-            },
-            colors = TextFieldDefaults.textFieldColors(
-                cursorColor = Color.Black,
-                textColor = Color.Black,
-                backgroundColor = Color.Transparent,
-                focusedIndicatorColor = Color.Black,
-                unfocusedIndicatorColor = Color.Black,
-                disabledIndicatorColor = Color.Black,
-                focusedLabelColor = Color.Red
             )
-        )
 
-        DropdownMenu(
-            expanded = isTargetTFExpanded,
-            onDismissRequest = {
-                isTargetTFExpanded = false
-            }, modifier = modifier.constrainAs(targetCurrencyDropDown){
-                top.linkTo(targetCurrencyTF.bottom)
-            }
-                .width(with(LocalDensity.current) {
-                    textFiledSize.width.toDp()
-                })
-        ) {
-            list.forEach {
-                DropdownMenuItem(onClick = {
-
-                    targetFullCurrencyName = it.second
-                    targetShortCurrencyName = it.first
-                    Log.d("TAG", "targetShortCurrencyName $targetShortCurrencyName")
+            DropdownMenu(
+                expanded = isTargetTFExpanded,
+                onDismissRequest = {
                     isTargetTFExpanded = false
-                }) {
+                }, modifier = modifier
+                    .width(with(LocalDensity.current) {
+                        textFiledSize.width.toDp()
+                    })
+            ) {
+                list.forEach {
+                    DropdownMenuItem(onClick = {
 
-                    targetBothCurrencyNames = it.toString()
-                    Text(text = targetBothCurrencyNames)
+                        targetFullCurrencyName = it.second
+                        targetShortCurrencyName = it.first
+                        Log.d("TAG", "targetShortCurrencyName $targetShortCurrencyName")
+                        isTargetTFExpanded = false
+                    }) {
+
+                        targetBothCurrencyNames = it.toString()
+                        Text(text = targetBothCurrencyNames)
+                    }
                 }
             }
         }
-
-
 
 
         OutlinedTextField(
