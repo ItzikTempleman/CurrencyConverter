@@ -10,6 +10,7 @@ import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -20,8 +21,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.toSize
 import com.itzik.currency.constants.getCurrencyNames
 import com.itzik.currency.viewmodels.CurrencyViewModel
@@ -56,13 +59,22 @@ fun DropdownMenuBox(
                     textFiledSize = it.size.toSize()
                 },
             label = {
-                Text(text = "Select Currency")
+                Text(text = stringResource(id = R.string.select_currency))
             },
             trailingIcon = {
                 Icon(icon, "", Modifier.clickable {
                     expanded = !expanded
                 })
-            }
+            },
+            colors = TextFieldDefaults.textFieldColors(
+                cursorColor = Color.Black,
+                textColor = Color.Black,
+                backgroundColor = Color.Transparent,
+                focusedIndicatorColor = Color.Black,
+                unfocusedIndicatorColor = Color.Black,
+                disabledIndicatorColor = Color.Black,
+                focusedLabelColor = Color.Black
+            )
         )
         DropdownMenu(
             expanded = expanded,
