@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import com.itzik.currency.constants.getCurrencyNames
 import com.itzik.currency.viewmodels.CurrencyViewModel
@@ -35,7 +36,7 @@ import kotlinx.coroutines.CoroutineScope
 fun DropdownMenuBox(
     modifier: Modifier,
     currencyViewModel: CurrencyViewModel,
-    coroutineScope: CoroutineScope,
+    coroutineScope: CoroutineScope
 ) {
     var expanded by remember { mutableStateOf(false) }
     val list = getCurrencyNames
@@ -59,7 +60,10 @@ fun DropdownMenuBox(
                     textFiledSize = it.size.toSize()
                 },
             label = {
-                Text(text = stringResource(id = R.string.select_currency))
+                Text(
+                    text = stringResource(id = R.string.select_currency),
+                    fontSize = 22.sp
+                )
             },
             trailingIcon = {
                 Icon(icon, "", Modifier.clickable {
@@ -73,7 +77,7 @@ fun DropdownMenuBox(
                 focusedIndicatorColor = Color.Black,
                 unfocusedIndicatorColor = Color.Black,
                 disabledIndicatorColor = Color.Black,
-                focusedLabelColor = Color.Black
+                focusedLabelColor = Color.Red
             )
         )
         DropdownMenu(

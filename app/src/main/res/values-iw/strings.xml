@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name">CurrencyConverter</string>
     <string name="select_currency">בחר מטבע</string>
-    <string name="i_have">"יש לי "</string>
-    <string name="i_want">אני רוצה</string>
+    <string name="value">ערך</string>
+    <string name="amount">כמות</string>
 </resources>

@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.currency.DropdownMenuBox
@@ -34,7 +35,7 @@ fun ConvertScreen(
     var wantInitialValue by remember { mutableStateOf("0") }
 
     ConstraintLayout(modifier = modifier.fillMaxSize()) {
-        val (chooseCurrencyDropDown, haveTF, wantTF, reverseTF) = createRefs()
+        val (chooseCurrencyDropDown, haveTF, wantTF, reverseIcon) = createRefs()
         DropdownMenuBox(
             modifier = Modifier
                 .constrainAs(chooseCurrencyDropDown) {
@@ -62,7 +63,8 @@ fun ConvertScreen(
             },
 
             label = {
-                Text(text = stringResource(id = R.string.i_have))
+                Text(text = stringResource(id = R.string.amount),
+                    fontSize = 22.sp)
             },
             colors = TextFieldDefaults.textFieldColors(
                 cursorColor = Color.Black,
@@ -71,7 +73,7 @@ fun ConvertScreen(
                 focusedIndicatorColor = Color.Black,
                 unfocusedIndicatorColor = Color.Black,
                 disabledIndicatorColor = Color.Black,
-                focusedLabelColor = Color.Black
+                focusedLabelColor = Color.Red
             )
         )
 
@@ -87,7 +89,10 @@ fun ConvertScreen(
                 wantInitialValue = it
             },
             label = {
-                Text(text = stringResource(id = R.string.i_want))
+                Text(
+                    text = stringResource(id = R.string.value),
+                    fontSize = 22.sp
+                )
             },
             colors = TextFieldDefaults.textFieldColors(
                 cursorColor = Color.Black,
@@ -96,8 +101,20 @@ fun ConvertScreen(
                 focusedIndicatorColor = Color.Black,
                 unfocusedIndicatorColor = Color.Black,
                 disabledIndicatorColor = Color.Black,
-                focusedLabelColor = Color.Black
+                focusedLabelColor = Color.Red
             )
+        )
+
+        ReverseValues(
+            modifier = Modifier
+                .constrainAs(reverseIcon) {
+                    top.linkTo(haveTF.top)
+                    end.linkTo(haveTF.end)
+                    bottom.linkTo(wantTF.bottom)
+                }
+                .padding(end = 30.dp),
+            currencyViewModel = currencyViewModel,
+            coroutineScope = coroutineScope
         )
     }
 }
