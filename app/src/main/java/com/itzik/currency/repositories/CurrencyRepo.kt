@@ -1,12 +1,14 @@
 package com.itzik.currency.repositories
 
-import com.itzik.currency.models.CurrencyDropdownItemResponse
-import com.itzik.currency.models.UnitResponse
+import com.itzik.currency.models.CurrencyResponse
 import retrofit2.Response
 
 interface CurrencyRepo {
 
-    suspend fun getUnit(sourceUnit: String, targetUnit: String, amount: Double): Response<UnitResponse>
+    suspend fun getCurrency(
+        sourceUnit: String,
+        targetUnit: String,
+        amount: Double,
+    ): Response<CurrencyResponse>
 
-    suspend fun getCurrencyList():Response<CurrencyDropdownItemResponse>
 }

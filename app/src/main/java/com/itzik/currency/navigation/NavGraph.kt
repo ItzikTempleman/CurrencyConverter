@@ -9,7 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.itzik.currency.screens.ConvertScreen
 import com.itzik.currency.screens.SplashScreen
-import com.itzik.currency.viewmodels.UnitViewModel
+import com.itzik.currency.viewmodels.CurrencyViewModel
 import kotlinx.coroutines.CoroutineScope
 
 
@@ -21,7 +21,7 @@ const val HOME = "homeGraph"
 @Composable
 fun SetupNavGraph(
     navHostController: NavHostController,
-    unitViewModel: UnitViewModel,
+    currencyViewModel: CurrencyViewModel,
     coroutineScope: CoroutineScope,
 ) {
     NavHost(
@@ -46,7 +46,7 @@ fun SetupNavGraph(
                 ConvertScreen(
                     modifier = Modifier,
                     navHostController = navHostController,
-                    unitViewModel = unitViewModel,
+                    currencyViewModel = currencyViewModel,
                     coroutineScope =coroutineScope
                 )
             }

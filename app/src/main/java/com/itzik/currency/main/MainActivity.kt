@@ -8,7 +8,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.itzik.currency.navigation.SetupNavGraph
-import com.itzik.currency.viewmodels.UnitViewModel
+import com.itzik.currency.viewmodels.CurrencyViewModel
 import com.itzik.theme.CurrencyTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -16,16 +16,16 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private lateinit var unitViewModel: UnitViewModel
+    private lateinit var currencyViewModel: CurrencyViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
-            unitViewModel = viewModel()
+            currencyViewModel = viewModel()
             val coroutineScope = rememberCoroutineScope()
 
             CurrencyTheme {
-                SetupNavGraph(navHostController = rememberNavController(), unitViewModel= unitViewModel, coroutineScope=coroutineScope)
+                SetupNavGraph(navHostController = rememberNavController(), currencyViewModel= currencyViewModel, coroutineScope=coroutineScope)
             }
         }
     }
