@@ -62,7 +62,7 @@ fun DropdownMenuBox(
             label = {
                 Text(
                     text = stringResource(id = R.string.select_currency),
-                    fontSize = 22.sp
+                    fontSize = 24.sp
                 )
             },
             trailingIcon = {
