@@ -109,7 +109,7 @@ fun DropdownMenuBox(
                     bothCurrencyNames = it.toString()
                     Text(text = bothCurrencyNames)
 
-                    currencyViewModel.shareInitialAndTargetCurrencyType(shortCurrencyName)
+
 
                 }
             }

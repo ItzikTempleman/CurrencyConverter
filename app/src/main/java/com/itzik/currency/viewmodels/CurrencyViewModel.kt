@@ -34,6 +34,6 @@ class CurrencyViewModel
         return viewModelFlow
     }
 
-     fun shareInitialAndTargetCurrencyType(shortCurrencyName: String):String =shortCurrencyName
+
 
 }
