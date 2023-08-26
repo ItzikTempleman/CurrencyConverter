@@ -7,7 +7,7 @@ import retrofit2.http.Path
 
 interface CurrencyRequest {
 
-    @GET("convertcurrency?have={haveCurrency}&want={wantedCurrency}&amount={amount}")
+    @GET("v1/convertcurrency?have={haveCurrency}&want={wantedCurrency}&amount={amount}")
     suspend fun getCurrency(
         @Path("haveCurrency") haveCurrency: String,
         @Path("wantedCurrency") wantedCurrency: String,

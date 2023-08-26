@@ -1,7 +1,7 @@
 package com.itzik.currency.constants
 
 object Constants {
-    const val BASE_URL = "httpsto//currency-converter-by-api-ninjas.p.rapidapi.com/v1/"
+    const val BASE_URL = "https://currency-converter-by-api-ninjas.p.rapidapi.com/"
 
 
 
