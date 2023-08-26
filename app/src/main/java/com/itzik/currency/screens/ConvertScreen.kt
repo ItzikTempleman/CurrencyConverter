@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
@@ -23,6 +24,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -40,7 +43,7 @@ fun ConvertScreen(
     coroutineScope: CoroutineScope,
 ) {
 
-    var haveInitialValue by remember { mutableStateOf("0") }
+    var haveInitialValue by remember { mutableStateOf("") }
     var targetValue by remember { mutableStateOf("0") }
 
     ConstraintLayout(modifier = modifier.fillMaxSize()) {
@@ -70,6 +73,8 @@ fun ConvertScreen(
 
 
         OutlinedTextField(
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier
                 .constrainAs(amountTF) {
                     top.linkTo(chooseCurrencyDropDown.bottom)
@@ -80,7 +85,6 @@ fun ConvertScreen(
             onValueChange = {
                 haveInitialValue = it
             },
-
             label = {
                 Text(
                     text = stringResource(id = R.string.amount),
@@ -95,7 +99,8 @@ fun ConvertScreen(
                 unfocusedIndicatorColor = Color.Black,
                 disabledIndicatorColor = Color.Black,
                 focusedLabelColor = Color.Red
-            )
+            ),
+            textStyle = TextStyle(fontSize = 24.sp)
         )
 
         Text(

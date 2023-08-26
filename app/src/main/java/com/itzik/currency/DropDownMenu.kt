@@ -38,6 +38,7 @@ fun DropdownMenuBox(
     currencyViewModel: CurrencyViewModel,
     coroutineScope: CoroutineScope
 ) {
+
     var expanded by remember { mutableStateOf(false) }
     val list = getCurrencyNames
     var selectedItem by remember { mutableStateOf("") }
