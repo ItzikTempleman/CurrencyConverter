@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -39,6 +40,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.toSize
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.currency.R
@@ -70,12 +72,12 @@ fun ConvertScreen(
 
     var initialValue by remember { mutableStateOf("") }
     val targetValue by remember { mutableStateOf("0") }
-    val textFiledSize by remember { mutableStateOf(Size.Zero) }
+    var textFiledSize by remember { mutableStateOf(Size.Zero) }
 
     val list = getCurrencyNames
 
 
-    val icon = if (isInitialTFExpanded ||isTargetTFExpanded) {
+    val icon = if (isInitialTFExpanded || isTargetTFExpanded) {
         Icons.Filled.KeyboardArrowUp
     } else {
         Icons.Filled.KeyboardArrowDown
@@ -84,7 +86,7 @@ fun ConvertScreen(
 
 
     ConstraintLayout(modifier = modifier.fillMaxSize()) {
-        val (logo, initialCurrencyDropDown, targetCurrencyDropDown, amountTF, valueText, reverseIcon) = createRefs()
+        val (logo, initialCurrencyTF, targetCurrencyTF, initialCurrencyDropDown, targetCurrencyDropDown, amountTF, valueText, reverseIcon) = createRefs()
 
         Image(
             modifier = Modifier
@@ -106,13 +108,15 @@ fun ConvertScreen(
                 initialFullCurrencyName = it
             },
             modifier = Modifier
-                .constrainAs(initialCurrencyDropDown) {
+                .constrainAs(initialCurrencyTF) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     top.linkTo(logo.bottom)
                 }
                 .padding(vertical = 2.dp, horizontal = 12.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth().onGloballyPositioned {
+                    textFiledSize = it.size.toSize()
+                },
             label = {
                 Text(
                     text = stringResource(id = R.string.initial_currency),
@@ -139,7 +143,9 @@ fun ConvertScreen(
             expanded = isInitialTFExpanded,
             onDismissRequest = {
                 isInitialTFExpanded = false
-            }, modifier = Modifier
+            }, modifier = modifier.constrainAs(initialCurrencyDropDown){
+                top.linkTo(initialCurrencyTF.bottom)
+            }
                 .width(with(LocalDensity.current) {
                     textFiledSize.width.toDp()
                 })
@@ -168,14 +174,17 @@ fun ConvertScreen(
             onValueChange = {
                 targetFullCurrencyName = it
             },
-            modifier = Modifier
-                .constrainAs(targetCurrencyDropDown) {
+            modifier = modifier
+                .constrainAs(targetCurrencyTF) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                    top.linkTo(initialCurrencyDropDown.bottom)
+                    top.linkTo(initialCurrencyTF.bottom)
                 }
+
                 .padding(vertical = 2.dp, horizontal = 12.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth().onGloballyPositioned {
+                    textFiledSize = it.size.toSize()
+                },
             label = {
                 Text(
                     text = stringResource(id = R.string.target_currency),
@@ -202,7 +211,9 @@ fun ConvertScreen(
             expanded = isTargetTFExpanded,
             onDismissRequest = {
                 isTargetTFExpanded = false
-            }, modifier = Modifier
+            }, modifier = modifier.constrainAs(targetCurrencyDropDown){
+                top.linkTo(targetCurrencyTF.bottom)
+            }
                 .width(with(LocalDensity.current) {
                     textFiledSize.width.toDp()
                 })
@@ -230,7 +241,7 @@ fun ConvertScreen(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier
                 .constrainAs(amountTF) {
-                    top.linkTo(targetCurrencyDropDown.bottom)
+                    top.linkTo(targetCurrencyTF.bottom)
                 }
                 .padding(horizontal = 12.dp, vertical = 24.dp)
                 .fillMaxWidth(),
@@ -281,9 +292,9 @@ fun ConvertScreen(
         ReverseValues(
             modifier = Modifier
                 .constrainAs(reverseIcon) {
-                    top.linkTo(initialCurrencyDropDown.top)
-                    end.linkTo(targetCurrencyDropDown.end)
-                    bottom.linkTo(targetCurrencyDropDown.bottom)
+                    top.linkTo(initialCurrencyTF.top)
+                    end.linkTo(targetCurrencyTF.end)
+                    bottom.linkTo(targetCurrencyTF.bottom)
                 }
                 .padding(end = 70.dp),
             currencyViewModel = currencyViewModel,

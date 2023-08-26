@@ -1,4 +1,4 @@
-package com.itzik.currency
+package com.itzik.currency.screens
 
 
 import android.util.Log
