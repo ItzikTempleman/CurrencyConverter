@@ -1,8 +1,12 @@
 package com.itzik.currency
 
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
@@ -14,11 +18,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-
-
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.toSize
 import com.itzik.currency.constants.getCurrencyNames
 import com.itzik.currency.viewmodels.CurrencyViewModel
@@ -32,7 +35,7 @@ fun DropdownMenuBox(
     coroutineScope: CoroutineScope,
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val nameList = getCurrencyNames
+    val list = getCurrencyNames
     var selectedItem by remember { mutableStateOf("") }
     var textFiledSize by remember { mutableStateOf(Size.Zero) }
 
@@ -61,7 +64,24 @@ fun DropdownMenuBox(
                 })
             }
         )
-
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = {
+                expanded = false
+            }, modifier = Modifier
+                .width(with(LocalDensity.current) {
+                    textFiledSize.width.toDp()
+                })
+        ) {
+            list.forEach { label ->
+                DropdownMenuItem(onClick = {
+                    selectedItem = label.toString()
+                    expanded = false
+                }) {
+                    Text(text = label.toString())
+                }
+            }
+        }
 
     }
 }
