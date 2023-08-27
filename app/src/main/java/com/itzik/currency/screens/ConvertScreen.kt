@@ -1,5 +1,6 @@
 package com.itzik.currency.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -248,6 +249,7 @@ fun ConvertScreen(
         )
 
         if (initialShortCurrencyName.isNotBlank() && targetShortCurrencyName.isNotBlank() && initialValue.isNotBlank()) {
+            Log.d("TAG", "$initialShortCurrencyName $targetShortCurrencyName")
             coroutineScope.launch {
                 currencyViewModel.getCurrency(
                     initialShortCurrencyName,
@@ -255,11 +257,13 @@ fun ConvertScreen(
                     initialValue.toDouble()
                 ).collect {
                     currency = it
+                    targetValue = if (initialShortCurrencyName.isNotBlank() && targetShortCurrencyName.isNotBlank() && initialValue.isNotBlank()) currency.new_amount.toString() else ""
+                    Log.d("TAG", "new value: ${currency.new_amount}")
                 }
             }
         }
 
-        targetValue = if (initialShortCurrencyName.isNotBlank() && targetShortCurrencyName.isNotBlank() && initialValue.isNotBlank()) currency.new_currency else ""
+
 
         Text(
             modifier = Modifier
