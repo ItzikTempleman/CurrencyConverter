@@ -1,6 +1,5 @@
 package com.itzik.currency.screens
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -45,8 +44,10 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.currency.R
 import com.itzik.currency.constants.getCurrencyNames
+import com.itzik.currency.models.CurrencyResponse
 import com.itzik.currency.viewmodels.CurrencyViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun ConvertScreen(
@@ -59,27 +60,22 @@ fun ConvertScreen(
     var initialFullCurrencyName by remember { mutableStateOf("") }
     var initialBothCurrencyNames by remember { mutableStateOf("") }
     var isInitialTFExpanded by remember { mutableStateOf(false) }
-
     var targetShortCurrencyName by remember { mutableStateOf("") }
     var targetFullCurrencyName by remember { mutableStateOf("") }
     var targetBothCurrencyNames by remember { mutableStateOf("") }
     var isTargetTFExpanded by remember { mutableStateOf(false) }
-
     var initialValue by remember { mutableStateOf("") }
-    val targetValue by remember { mutableStateOf("") }
+    var targetValue by remember { mutableStateOf("") }
     var textFiledSize by remember { mutableStateOf(Size.Zero) }
-
     val list = getCurrencyNames
-
     val icon = if (isInitialTFExpanded || isTargetTFExpanded) {
         Icons.Filled.KeyboardArrowUp
     } else {
         Icons.Filled.KeyboardArrowDown
     }
-
+    var currency = CurrencyResponse(0.0, "", "", 0.0)
     ConstraintLayout(modifier = modifier.fillMaxSize()) {
         val (logo, initialCurrencyTF, targetCurrencyTF, amountTF, valueText, reverseIcon) = createRefs()
-
         Image(
             modifier = Modifier
                 .constrainAs(logo) {
@@ -100,13 +96,13 @@ fun ConvertScreen(
             }
         ) {
             OutlinedTextField(
-                textStyle = TextStyle(fontSize = 24.sp),
+                singleLine = true,
+                textStyle = TextStyle(fontSize = 18.sp),
                 value = initialFullCurrencyName,
                 onValueChange = {
                     initialFullCurrencyName = it
                 },
                 modifier = Modifier
-
                     .padding(vertical = 2.dp, horizontal = 12.dp)
                     .fillMaxWidth()
                     .onGloballyPositioned {
@@ -115,7 +111,7 @@ fun ConvertScreen(
                 label = {
                     Text(
                         text = stringResource(id = R.string.initial_currency),
-                        fontSize = 24.sp
+                        fontSize = 20.sp
                     )
                 },
                 trailingIcon = {
@@ -145,18 +141,12 @@ fun ConvertScreen(
             ) {
                 list.forEach {
                     DropdownMenuItem(onClick = {
-
-
                         initialFullCurrencyName = it.second
                         initialShortCurrencyName = it.first
-                        Log.d("TAG", "initialShortCurrencyName $initialShortCurrencyName")
                         isInitialTFExpanded = false
                     }) {
-
                         initialBothCurrencyNames = it.toString()
                         Text(text = initialBothCurrencyNames)
-
-
                     }
                 }
             }
@@ -168,7 +158,8 @@ fun ConvertScreen(
             top.linkTo(initialCurrencyTF.bottom)
         }) {
             OutlinedTextField(
-                textStyle = TextStyle(fontSize = 24.sp),
+                singleLine = true,
+                textStyle = TextStyle(fontSize = 18.sp),
                 value = targetFullCurrencyName,
                 onValueChange = {
                     targetFullCurrencyName = it
@@ -182,7 +173,7 @@ fun ConvertScreen(
                 label = {
                     Text(
                         text = stringResource(id = R.string.target_currency),
-                        fontSize = 24.sp
+                        fontSize = 20.sp
                     )
                 },
                 trailingIcon = {
@@ -212,13 +203,10 @@ fun ConvertScreen(
             ) {
                 list.forEach {
                     DropdownMenuItem(onClick = {
-
                         targetFullCurrencyName = it.second
                         targetShortCurrencyName = it.first
-                        Log.d("TAG", "targetShortCurrencyName $targetShortCurrencyName")
                         isTargetTFExpanded = false
                     }) {
-
                         targetBothCurrencyNames = it.toString()
                         Text(text = targetBothCurrencyNames)
                     }
@@ -241,8 +229,10 @@ fun ConvertScreen(
             },
             label = {
                 Text(
-                    text = stringResource(id = R.string.amount),
-                    fontSize = 24.sp
+                    text = if (initialFullCurrencyName.isNotBlank()) stringResource(id = R.string.amount) + " of " + initialFullCurrencyName else stringResource(
+                        id = R.string.amount
+                    ),
+                    fontSize = 18.sp
                 )
             },
             colors = TextFieldDefaults.textFieldColors(
@@ -257,13 +247,28 @@ fun ConvertScreen(
             textStyle = TextStyle(fontSize = 24.sp)
         )
 
+        if (initialShortCurrencyName.isNotBlank() && targetShortCurrencyName.isNotBlank() && initialValue.isNotBlank()) {
+            coroutineScope.launch {
+                currencyViewModel.getCurrency(
+                    initialShortCurrencyName,
+                    targetShortCurrencyName,
+                    initialValue.toDouble()
+                ).collect {
+                    currency = it
+                }
+            }
+        }
+
+        targetValue =
+            if (initialShortCurrencyName.isNotBlank() && targetShortCurrencyName.isNotBlank() && initialValue.isNotBlank()) currency.new_currency else ""
+
         Text(
             modifier = Modifier
-                .clip(RoundedCornerShape(3.dp))
+                .clip(RoundedCornerShape(4.dp))
                 .border(
                     width = 1.dp,
                     color = Color.Black,
-                    shape = RoundedCornerShape(3.dp)
+                    shape = RoundedCornerShape(4.dp)
                 )
                 .background(colorResource(id = R.color.light_red))
                 .constrainAs(valueText) {
@@ -286,9 +291,12 @@ fun ConvertScreen(
                     end.linkTo(targetCurrencyTF.end)
                     bottom.linkTo(targetCurrencyTF.bottom)
                 }
-                .padding(end = 70.dp),
+                .padding(end = 50.dp),
             currencyViewModel = currencyViewModel,
             coroutineScope = coroutineScope
         )
     }
 }
+
+
+
