@@ -259,8 +259,7 @@ fun ConvertScreen(
             }
         }
 
-        targetValue =
-            if (initialShortCurrencyName.isNotBlank() && targetShortCurrencyName.isNotBlank() && initialValue.isNotBlank()) currency.new_currency else ""
+        targetValue = if (initialShortCurrencyName.isNotBlank() && targetShortCurrencyName.isNotBlank() && initialValue.isNotBlank()) currency.new_currency else ""
 
         Text(
             modifier = Modifier

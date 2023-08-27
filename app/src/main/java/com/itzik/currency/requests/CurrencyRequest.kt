@@ -8,7 +8,7 @@ import retrofit2.http.Query
 
 interface CurrencyRequest {
 
-    @GET("v1/convertcurrency?have={haveCurrency}&want={wantedCurrency}&amount={amount}")
+    @GET("convertcurrency?have={haveCurrency}&want={wantedCurrency}&amount={amount}")
     suspend fun getCurrency(
         @Query("haveCurrency") haveCurrency: String,
         @Query("wantedCurrency") wantedCurrency: String,
