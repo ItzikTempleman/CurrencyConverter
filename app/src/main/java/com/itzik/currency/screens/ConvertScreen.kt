@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
@@ -74,9 +75,12 @@ fun ConvertScreen(
     } else {
         Icons.Filled.KeyboardArrowDown
     }
+    var tempValue by remember {
+        mutableStateOf("")
+    }
     var currency = CurrencyResponse(0.0, "", "", 0.0)
     ConstraintLayout(modifier = modifier.fillMaxSize()) {
-        val (logo, initialCurrencyTF, targetCurrencyTF, amountTF, valueText, reverseIcon) = createRefs()
+        var (logo, initialCurrencyTF, targetCurrencyTF, amountTF, valueText, reverseIcon) = createRefs()
         Image(
             modifier = Modifier
                 .constrainAs(logo) {
@@ -257,7 +261,8 @@ fun ConvertScreen(
                     initialValue.toDouble()
                 ).collect {
                     currency = it
-                    targetValue = if (initialShortCurrencyName.isNotBlank() && targetShortCurrencyName.isNotBlank() && initialValue.isNotBlank()) currency.new_amount.toString() else ""
+                    targetValue =
+                        if (initialShortCurrencyName.isNotBlank() && targetShortCurrencyName.isNotBlank() && initialValue.isNotBlank()) currency.new_amount.toString() else ""
                     Log.d("TAG", "new value: ${currency.new_amount}")
                 }
             }
@@ -287,19 +292,39 @@ fun ConvertScreen(
             fontSize = 24.sp
         )
 
-        ReverseValues(
+
+
+        FloatingActionButton(
             modifier = Modifier
                 .constrainAs(reverseIcon) {
                     top.linkTo(initialCurrencyTF.top)
                     end.linkTo(targetCurrencyTF.end)
                     bottom.linkTo(targetCurrencyTF.bottom)
                 }
-                .padding(end = 50.dp),
-            currencyViewModel = currencyViewModel,
-            coroutineScope = coroutineScope
-        )
+                .padding(end = 50.dp)
+                .border(
+                    width = 2.dp,
+                    color = Color.Red,
+                    shape = RoundedCornerShape(80.dp)
+                ),
+            onClick = {
+                tempValue = initialShortCurrencyName
+                targetShortCurrencyName = tempValue
+                initialShortCurrencyName =targetShortCurrencyName
+            },
+            backgroundColor = Color.White,
+            shape = RoundedCornerShape(80.dp),
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.swapvert),
+                contentDescription = null,
+                tint = Color.Red
+            )
+        }
     }
 }
+
+
 
 
 
