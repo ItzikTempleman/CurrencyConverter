@@ -269,7 +269,6 @@ fun ConvertScreen(
         }
 
 
-
         Text(
             modifier = Modifier
                 .clip(RoundedCornerShape(4.dp))
@@ -291,8 +290,6 @@ fun ConvertScreen(
             color = Color.White,
             fontSize = 24.sp
         )
-
-
 
         FloatingActionButton(
             modifier = Modifier
