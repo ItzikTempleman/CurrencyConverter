@@ -56,7 +56,7 @@ fun ConvertScreen(
     modifier: Modifier,
     navHostController: NavHostController,
     currencyViewModel: CurrencyViewModel,
-    coroutineScope: CoroutineScope,
+    coroutineScope: CoroutineScope
 ) {
     var initialShortCurrencyName by remember { mutableStateOf("") }
     var initialFullCurrencyName by remember { mutableStateOf("") }
@@ -101,6 +101,7 @@ fun ConvertScreen(
             }
         ) {
             OutlinedTextField(
+
                 singleLine = true,
                 textStyle = TextStyle(fontSize = 18.sp),
                 value = initialFullCurrencyName,
