@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -114,11 +115,6 @@ fun MainScreen(
 
         )
 
-        Log.d(
-            "TAG",
-            "Status: ${initialCurrencyName.isNotBlank()} && ${targetCurrencyName.isNotBlank()} && ${initialCurrencyAmount.isNotBlank()}"
-        )
-
         if (initialCurrencyName.isNotBlank() && targetCurrencyName.isNotBlank() && initialCurrencyAmount.isNotBlank()) {
             coroutineScope.launch {
                 currencyViewModel.getCurrency(
@@ -151,10 +147,15 @@ fun MainScreen(
                     color = Color.Black,
                     shape = RoundedCornerShape(4.dp)
                 )
-                .background(Color.Red)
+                .background(colorResource(id = R.color.standard_purple))
                 .fillMaxWidth()
                 .padding(20.dp),
-            text = "Value: $targetCurrencyAmount",
+            text = "Value: $targetCurrencyAmount ${
+                stringToPairGetIndex(
+                    targetCurrencyName,
+                    returnIndex = 1
+                )
+            }",
             color = Color.White,
             fontSize = 24.sp
         )
@@ -166,22 +167,19 @@ fun MainScreen(
                     end.linkTo(targetCurrencyTF.end)
                     bottom.linkTo(targetCurrencyTF.bottom)
                 }
-                .padding(top = 6.dp, end = 50.dp)
-                .border(
-                    width = 2.dp,
-                    color = Color.Red,
-                    shape = RoundedCornerShape(90.dp)
-                ),
+
+                .padding(top = 6.dp, end = 50.dp),
+
             onClick = {
 
             },
-            backgroundColor = Color.White,
+            backgroundColor = colorResource(id = R.color.standard_purple),
             shape = RoundedCornerShape(90.dp),
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.swapvert),
                 contentDescription = null,
-                tint = Color.Red
+                tint = Color.White
             )
         }
     }

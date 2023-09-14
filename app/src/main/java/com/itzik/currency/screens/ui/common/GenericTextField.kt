@@ -27,11 +27,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
+import com.itzik.currency.R
 
 
 @Composable
@@ -44,9 +46,10 @@ fun GenericTextField(
     isKeyTypeNumOnly: Boolean,
 ) {
     val pattern = remember { Regex("^\\d+\$") }
-    var textFiledSize by remember { mutableStateOf(Size.Zero) }
 
+    var selectedItem by remember { mutableStateOf("") }
     var isContextMenuVisible by rememberSaveable { mutableStateOf(false) }
+
     var icon: ImageVector? = null
     if (!isKeyTypeNumOnly) {
         icon = if (isContextMenuVisible) {
@@ -56,13 +59,6 @@ fun GenericTextField(
         }
     }
 
-    Log.d("TAG", "value: $value")
-    Log.d("TAG", "currencyList: $currencyList")
-
-    var selectedItem by remember { mutableStateOf("") }
-    /*var input by remember {
-        mutableStateOf(value)
-    }*/
     OutlinedTextField(
         keyboardOptions = if (isKeyTypeNumOnly) KeyboardOptions(keyboardType = KeyboardType.Number) else KeyboardOptions(
             keyboardType = KeyboardType.Text
@@ -76,15 +72,12 @@ fun GenericTextField(
                     onValueChange(it)
                 }
             } else onValueChange(it)
-            Log.d("TAG", "'input' onValueChange: $value")
         },
 
         modifier = modifier
             .padding(vertical = 2.dp, horizontal = 12.dp)
             .fillMaxWidth()
-            .onGloballyPositioned {
-                textFiledSize = it.size.toSize()
-            },
+,
         label = {
             Text(
                 text = label,
@@ -105,7 +98,7 @@ fun GenericTextField(
             focusedIndicatorColor = Color.Black,
             unfocusedIndicatorColor = Color.Black,
             disabledIndicatorColor = Color.Black,
-            focusedLabelColor = Color.Red
+            focusedLabelColor = colorResource(id = R.color.standard_purple)
         )
     )
 
@@ -115,13 +108,10 @@ fun GenericTextField(
             isContextMenuVisible = false
         },
         modifier = modifier
-            .width(with(LocalDensity.current) {
-                textFiledSize.width.toDp()
-            })
+            .fillMaxWidth()
     ) {
         currencyList.forEach {
             DropdownMenuItem(onClick = {
-                Log.d("TAG", "Selected item: $it")
                 selectedItem = it.toString()
                 isContextMenuVisible = false
                 onValueChange(selectedItem)
