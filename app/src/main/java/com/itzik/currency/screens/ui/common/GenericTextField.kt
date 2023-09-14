@@ -116,7 +116,6 @@ fun GenericTextField(
                 isContextMenuVisible = false
                 onValueChange(selectedItem)
             }) {
-
                 Text(text = it.toString())
             }
         }
