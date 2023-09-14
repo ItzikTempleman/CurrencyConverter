@@ -1,5 +1,6 @@
 package com.itzik.currency.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -7,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -17,7 +17,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -30,6 +29,7 @@ import com.itzik.currency.R
 import com.itzik.currency.constants.getCurrencyNames
 import com.itzik.currency.models.CurrencyResponse
 import com.itzik.currency.screens.ui.common.GenericTextField
+import com.itzik.currency.utils.stringToPairGetIndex
 import com.itzik.currency.viewmodels.CurrencyViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -71,11 +71,12 @@ fun MainScreen(
             }
         ) {
             GenericTextField(
-                input = initialCurrencyName,
+                value = stringToPairGetIndex(initialCurrencyName , 1),
                 modifier = modifier.padding(20.dp),
                 currencyList = currencyList,
                 isKeyTypeNumOnly = false,
-                label = stringResource(id = R.string.initial_currency)
+                label = stringResource(id = R.string.initial_currency),
+                onValueChange = { initialCurrencyName = it }
             )
         }
 
@@ -86,19 +87,20 @@ fun MainScreen(
         }
         ) {
             GenericTextField(
-                input = targetCurrencyName,
+                value = stringToPairGetIndex(targetCurrencyName , 1),
                 modifier = modifier.padding(20.dp),
                 currencyList = currencyList,
                 isKeyTypeNumOnly = false,
-                label = stringResource(id = R.string.target_currency)
+                label = stringResource(id = R.string.target_currency),
+                onValueChange = { targetCurrencyName = it }
             )
         }
 
         GenericTextField(
-            label = if (initialCurrencyName.isNotBlank()) stringResource(id = R.string.amount) + " of " + initialCurrencyName else stringResource(
+            label = if (initialCurrencyName.isNotBlank()) stringResource(id = R.string.amount) + " of " + stringToPairGetIndex(initialCurrencyName, returnIndex = 1) else stringResource(
                 id = R.string.amount
             ),
-            input = initialCurrencyAmount,
+            value = initialCurrencyAmount,
             modifier = modifier
                 .constrainAs(amountTF) {
                     start.linkTo(parent.start)
@@ -107,19 +109,26 @@ fun MainScreen(
                 }
                 .padding(20.dp),
             currencyList = currencyList,
-            isKeyTypeNumOnly = true
+            isKeyTypeNumOnly = true,
+            onValueChange = { initialCurrencyAmount = it }
+
+        )
+
+        Log.d(
+            "TAG",
+            "Status: ${initialCurrencyName.isNotBlank()} && ${targetCurrencyName.isNotBlank()} && ${initialCurrencyAmount.isNotBlank()}"
         )
 
         if (initialCurrencyName.isNotBlank() && targetCurrencyName.isNotBlank() && initialCurrencyAmount.isNotBlank()) {
             coroutineScope.launch {
                 currencyViewModel.getCurrency(
-                    initialCurrencyName,
-                    targetCurrencyName,
+                    stringToPairGetIndex(initialCurrencyName, 0),
+                    stringToPairGetIndex(targetCurrencyName, 0),
                     initialCurrencyAmount.toDouble()
                 ).collect {
                     currency = it
                     targetCurrencyAmount = if
-                            (initialCurrencyName.isNotBlank()
+                                                   (initialCurrencyName.isNotBlank()
                         && targetCurrencyName.isNotBlank()
                         && initialCurrencyName.isNotBlank()
                     )

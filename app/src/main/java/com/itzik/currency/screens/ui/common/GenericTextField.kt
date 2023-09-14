@@ -2,8 +2,8 @@ package com.itzik.currency.screens.ui.common
 
 import android.util.Log
 import androidx.compose.foundation.clickable
-
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.DropdownMenu
@@ -19,59 +19,72 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.toSize
 
 
-@Composable()
+@Composable
 fun GenericTextField(
-    input: String,
+    value: String,
+    onValueChange: (String) -> Unit,
     label: String,
     modifier: Modifier,
     currencyList: List<Pair<String, String>>,
     isKeyTypeNumOnly: Boolean,
 ) {
     val pattern = remember { Regex("^\\d+\$") }
-    var isExpanded by remember { mutableStateOf(false) }
+    var textFiledSize by remember { mutableStateOf(Size.Zero) }
+
+    var isContextMenuVisible by rememberSaveable { mutableStateOf(false) }
     var icon: ImageVector? = null
     if (!isKeyTypeNumOnly) {
-        icon = if (isExpanded) {
+        icon = if (isContextMenuVisible) {
             Icons.Filled.KeyboardArrowUp
         } else {
             Icons.Filled.KeyboardArrowDown
         }
     }
 
-    var inputValue by remember {
-        mutableStateOf(input)
-    }
-    Log.d("TAG", "'input' from parameter: $inputValue")
+    Log.d("TAG", "value: $value")
+    Log.d("TAG", "currencyList: $currencyList")
 
     var selectedItem by remember { mutableStateOf("") }
-
+    /*var input by remember {
+        mutableStateOf(value)
+    }*/
     OutlinedTextField(
         keyboardOptions = if (isKeyTypeNumOnly) KeyboardOptions(keyboardType = KeyboardType.Number) else KeyboardOptions(
             keyboardType = KeyboardType.Text
         ),
         singleLine = true,
         textStyle = TextStyle(fontSize = 20.sp),
-        value = inputValue,
+        value = value,
         onValueChange = {
-            if(isKeyTypeNumOnly){
-                if(it.matches(pattern))
-                    inputValue = it
-            } else inputValue = it
-            Log.d("TAG", "'input' onValueChange: $inputValue")
+            if (isKeyTypeNumOnly) {
+                if (it.matches(pattern)){
+                    onValueChange(it)
+                }
+            } else onValueChange(it)
+            Log.d("TAG", "'input' onValueChange: $value")
         },
 
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .padding(vertical = 2.dp, horizontal = 12.dp)
+            .fillMaxWidth()
+            .onGloballyPositioned {
+                textFiledSize = it.size.toSize()
+            },
         label = {
             Text(
                 text = label,
@@ -81,7 +94,7 @@ fun GenericTextField(
         trailingIcon = {
             if (icon != null) {
                 Icon(icon, "", Modifier.clickable {
-                    isExpanded = !isExpanded
+                    isContextMenuVisible = !isContextMenuVisible
                 })
             }
         },
@@ -97,19 +110,24 @@ fun GenericTextField(
     )
 
     DropdownMenu(
-        expanded = isExpanded,
+        expanded = isContextMenuVisible,
         onDismissRequest = {
-            isExpanded = false
+            isContextMenuVisible = false
         },
-        modifier = Modifier.width(260.dp)
+        modifier = modifier
+            .width(with(LocalDensity.current) {
+                textFiledSize.width.toDp()
+            })
     ) {
         currencyList.forEach {
             DropdownMenuItem(onClick = {
                 Log.d("TAG", "Selected item: $it")
                 selectedItem = it.toString()
-                isExpanded = false
+                isContextMenuVisible = false
+                onValueChange(selectedItem)
             }) {
-                Text(text = selectedItem)
+
+                Text(text = it.toString())
             }
         }
     }
