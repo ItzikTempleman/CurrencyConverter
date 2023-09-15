@@ -50,18 +50,29 @@ fun MainScreen(
     var targetCurrencyAmount by remember { mutableStateOf("") }
 
     ConstraintLayout(modifier = modifier.fillMaxSize()) {
-        val (logo, initialCurrencyTF, targetCurrencyTF, amountTF, valueText, reverseIcon) = createRefs()
+        val (logo, title, initialCurrencyTF, targetCurrencyTF, amountTF, valueText, reverseIcon) = createRefs()
+
 
         Image(
             modifier = Modifier
                 .constrainAs(logo) {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
-                    end.linkTo(parent.end)
                 }
-                .padding(50.dp),
+                .padding(top = 12.dp, start = 24.dp),
             painter = painterResource(id = R.drawable.logo),
             contentDescription = ""
+        )
+
+        Text(
+            modifier = modifier
+                .constrainAs(title) {
+                    top.linkTo(logo.top)
+                    bottom.linkTo(logo.bottom)
+                    start.linkTo(logo.end)
+                }.padding(top=12.dp, start = 8.dp),
+            text = stringResource(id = R.string.title),
+            fontSize = 20.sp
         )
 
         Column(
@@ -70,7 +81,7 @@ fun MainScreen(
                     top.linkTo(logo.bottom)
                 }
                 .fillMaxWidth()
-                .padding(8.dp)
+                .padding(start = 8.dp, end = 8.dp, top=100.dp)
         ) {
             GenericTextField(
                 value = stringToPairGetIndex(initialCurrencyName, 1),
@@ -100,6 +111,27 @@ fun MainScreen(
             )
         }
 
+        FloatingActionButton(
+            modifier = Modifier
+                .constrainAs(reverseIcon) {
+                    top.linkTo(targetCurrencyTF.bottom)
+                    end.linkTo(parent.end)
+                    start.linkTo(parent.start)
+                },
+
+            onClick = {
+
+            },
+            backgroundColor = colorResource(id = R.color.standard_purple),
+            shape = RoundedCornerShape(90.dp),
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.swapvert),
+                contentDescription = null,
+                tint = Color.White
+            )
+        }
+
         GenericTextField(
             label = if (initialCurrencyName.isNotBlank()) stringResource(id = R.string.amount) + " of " + stringToPairGetIndex(
                 initialCurrencyName,
@@ -110,7 +142,7 @@ fun MainScreen(
             value = initialCurrencyAmount,
             modifier = modifier
                 .constrainAs(amountTF) {
-                    top.linkTo(targetCurrencyTF.bottom)
+                    top.linkTo(reverseIcon.bottom)
                 }
                 .fillMaxWidth()
                 .padding(8.dp),
@@ -163,29 +195,6 @@ fun MainScreen(
                 }",
                 color = Color.White,
                 fontSize = 24.sp
-            )
-        }
-
-        FloatingActionButton(
-            modifier = Modifier
-                .constrainAs(reverseIcon) {
-                    top.linkTo(initialCurrencyTF.top)
-                    end.linkTo(targetCurrencyTF.end)
-                    bottom.linkTo(targetCurrencyTF.bottom)
-                }
-
-                .padding(top = 6.dp, end = 60.dp),
-
-            onClick = {
-
-            },
-            backgroundColor = colorResource(id = R.color.standard_purple),
-            shape = RoundedCornerShape(90.dp),
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.swapvert),
-                contentDescription = null,
-                tint = Color.White
             )
         }
     }

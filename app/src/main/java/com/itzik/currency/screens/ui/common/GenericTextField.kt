@@ -89,9 +89,9 @@ fun GenericTextField(
         colors = TextFieldDefaults.textFieldColors(
             cursorColor = Color.Black,
             textColor = Color.Black,
-            backgroundColor = Color.Transparent,
-            focusedIndicatorColor = Color.Black,
-            unfocusedIndicatorColor = Color.Black,
+            backgroundColor = colorResource(id = R.color.very_light__purple),
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Black,
             focusedLabelColor = colorResource(id = R.color.standard_purple)
         )

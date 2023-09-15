@@ -5,4 +5,5 @@
     <string name="target_currency">מטבע רצוי</string>
     <string name="amount">כמות</string>
     <string name="initial_currency">מטבע מקור</string>
+    <string name="title">המרת מטבע</string>
 </resources>
