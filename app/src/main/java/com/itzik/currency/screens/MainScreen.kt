@@ -1,12 +1,12 @@
 package com.itzik.currency.screens
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.FloatingActionButton
@@ -65,15 +65,16 @@ fun MainScreen(
         )
 
         Column(
-            modifier = modifier.constrainAs(initialCurrencyTF) {
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                top.linkTo(logo.bottom)
-            }
+            modifier = modifier
+                .constrainAs(initialCurrencyTF) {
+                    top.linkTo(logo.bottom)
+                }
+                .fillMaxWidth()
+                .padding(8.dp)
         ) {
             GenericTextField(
-                value = stringToPairGetIndex(initialCurrencyName , 1),
-                modifier = modifier.padding(20.dp),
+                value = stringToPairGetIndex(initialCurrencyName, 1),
+                modifier = modifier,
                 currencyList = currencyList,
                 isKeyTypeNumOnly = false,
                 label = stringResource(id = R.string.initial_currency),
@@ -81,15 +82,17 @@ fun MainScreen(
             )
         }
 
-        Column(modifier = modifier.constrainAs(targetCurrencyTF) {
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-            top.linkTo(initialCurrencyTF.bottom)
-        }
+        Column(
+            modifier = modifier
+                .constrainAs(targetCurrencyTF) {
+                    top.linkTo(initialCurrencyTF.bottom)
+                }
+                .fillMaxWidth()
+                .padding(8.dp)
         ) {
             GenericTextField(
-                value = stringToPairGetIndex(targetCurrencyName , 1),
-                modifier = modifier.padding(20.dp),
+                value = stringToPairGetIndex(targetCurrencyName, 1),
+                modifier = modifier,
                 currencyList = currencyList,
                 isKeyTypeNumOnly = false,
                 label = stringResource(id = R.string.target_currency),
@@ -98,17 +101,19 @@ fun MainScreen(
         }
 
         GenericTextField(
-            label = if (initialCurrencyName.isNotBlank()) stringResource(id = R.string.amount) + " of " + stringToPairGetIndex(initialCurrencyName, returnIndex = 1) else stringResource(
+            label = if (initialCurrencyName.isNotBlank()) stringResource(id = R.string.amount) + " of " + stringToPairGetIndex(
+                initialCurrencyName,
+                returnIndex = 1
+            ) else stringResource(
                 id = R.string.amount
             ),
             value = initialCurrencyAmount,
             modifier = modifier
                 .constrainAs(amountTF) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
                     top.linkTo(targetCurrencyTF.bottom)
                 }
-                .padding(20.dp),
+                .fillMaxWidth()
+                .padding(8.dp),
             currencyList = currencyList,
             isKeyTypeNumOnly = true,
             onValueChange = { initialCurrencyAmount = it }
@@ -132,33 +137,34 @@ fun MainScreen(
                 }
             }
         }
-
-        Text(
+        Box(
             modifier = modifier
                 .constrainAs(valueText) {
                     top.linkTo(amountTF.bottom)
-                    start.linkTo(amountTF.start)
-                    end.linkTo(amountTF.end)
                 }
-                .padding(20.dp)
-                .clip(RoundedCornerShape(4.dp))
-                .border(
-                    width = 1.dp,
-                    color = Color.Black,
-                    shape = RoundedCornerShape(4.dp)
-                )
-                .background(colorResource(id = R.color.standard_purple))
                 .fillMaxWidth()
-                .padding(20.dp),
-            text = "Value: $targetCurrencyAmount ${
-                stringToPairGetIndex(
-                    targetCurrencyName,
-                    returnIndex = 1
+                .padding(horizontal = 20.dp, vertical = 12.dp)
+                .clip(
+                    RoundedCornerShape(32.dp)
                 )
-            }",
-            color = Color.White,
-            fontSize = 24.sp
-        )
+                .height(60.dp)
+                .background(colorResource(id = R.color.standard_purple)),
+        ) {
+
+
+            Text(
+                modifier = Modifier.padding(16.dp),
+
+                text = "Value: $targetCurrencyAmount ${
+                    stringToPairGetIndex(
+                        targetCurrencyName,
+                        returnIndex = 1
+                    )
+                }",
+                color = Color.White,
+                fontSize = 24.sp
+            )
+        }
 
         FloatingActionButton(
             modifier = Modifier
@@ -168,7 +174,7 @@ fun MainScreen(
                     bottom.linkTo(targetCurrencyTF.bottom)
                 }
 
-                .padding(top = 6.dp, end = 50.dp),
+                .padding(top = 6.dp, end = 60.dp),
 
             onClick = {
 

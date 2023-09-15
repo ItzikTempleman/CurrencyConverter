@@ -1,10 +1,9 @@
 package com.itzik.currency.screens.ui.common
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
@@ -22,17 +21,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.unit.toSize
 import com.itzik.currency.R
 
 
@@ -63,12 +58,13 @@ fun GenericTextField(
         keyboardOptions = if (isKeyTypeNumOnly) KeyboardOptions(keyboardType = KeyboardType.Number) else KeyboardOptions(
             keyboardType = KeyboardType.Text
         ),
+        shape = RoundedCornerShape(32.dp),
         singleLine = true,
         textStyle = TextStyle(fontSize = 20.sp),
         value = value,
         onValueChange = {
             if (isKeyTypeNumOnly) {
-                if (it.matches(pattern)){
+                if (it.matches(pattern)) {
                     onValueChange(it)
                 }
             } else onValueChange(it)
@@ -76,8 +72,7 @@ fun GenericTextField(
 
         modifier = modifier
             .padding(vertical = 2.dp, horizontal = 12.dp)
-            .fillMaxWidth()
-,
+            .fillMaxWidth(),
         label = {
             Text(
                 text = label,
