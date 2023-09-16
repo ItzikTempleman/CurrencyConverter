@@ -23,12 +23,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.itzik.currency.R
 import com.itzik.currency.constants.getCurrencyNames
 import com.itzik.currency.models.CurrencyResponse
+
+import com.itzik.currency.screens.ui.common.CustomImage
 import com.itzik.currency.screens.ui.common.GenericTextField
 import com.itzik.currency.utils.stringToPairGetIndex
 import com.itzik.currency.viewmodels.CurrencyViewModel
@@ -49,71 +54,64 @@ fun MainScreen(
     var initialCurrencyAmount by remember { mutableStateOf("") }
     var targetCurrencyAmount by remember { mutableStateOf("") }
 
+    CustomImage()
+
     ConstraintLayout(modifier = modifier.fillMaxSize()) {
         val (logo, title, initialCurrencyTF, targetCurrencyTF, amountTF, valueText, reverseIcon) = createRefs()
 
 
-        Image(
-            modifier = Modifier
-                .constrainAs(logo) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                }
-                .padding(top = 12.dp, start = 24.dp),
+
+        Image(modifier = Modifier
+            .constrainAs(logo) {
+                top.linkTo(parent.top)
+                start.linkTo(parent.start)
+            }
+            .padding(top = 12.dp, start = 16.dp),
             painter = painterResource(id = R.drawable.logo),
-            contentDescription = ""
-        )
+            contentDescription = "")
+        Text(modifier = modifier
+            .constrainAs(title) {
+                top.linkTo(logo.top)
+                bottom.linkTo(logo.bottom)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }
+            .padding(top = 12.dp),
 
-        Text(
-            modifier = modifier
-                .constrainAs(title) {
-                    top.linkTo(logo.top)
-                    bottom.linkTo(logo.bottom)
-                    start.linkTo(logo.end)
-                }.padding(top=12.dp, start = 8.dp),
-            text = stringResource(id = R.string.title),
-            fontSize = 20.sp
-        )
+            style = TextStyle(
+                fontWeight = FontWeight.Bold, fontSize = 24.sp, fontFamily = FontFamily.Monospace
+            ), text = stringResource(id = R.string.title), color = Color.Black)
 
-        Column(
-            modifier = modifier
-                .constrainAs(initialCurrencyTF) {
-                    top.linkTo(logo.bottom)
-                }
-                .fillMaxWidth()
-                .padding(start = 8.dp, end = 8.dp, top=100.dp)
-        ) {
-            GenericTextField(
-                value = stringToPairGetIndex(initialCurrencyName, 1),
+        Column(modifier = modifier
+            .constrainAs(initialCurrencyTF) {
+                top.linkTo(logo.bottom)
+            }
+            .fillMaxWidth()
+            .padding(start = 8.dp, end = 8.dp, top = 100.dp)) {
+            GenericTextField(value = stringToPairGetIndex(initialCurrencyName, 1),
                 modifier = modifier,
                 currencyList = currencyList,
                 isKeyTypeNumOnly = false,
                 label = stringResource(id = R.string.initial_currency),
-                onValueChange = { initialCurrencyName = it }
-            )
+                onValueChange = { initialCurrencyName = it })
         }
 
-        Column(
-            modifier = modifier
-                .constrainAs(targetCurrencyTF) {
-                    top.linkTo(initialCurrencyTF.bottom)
-                }
-                .fillMaxWidth()
-                .padding(8.dp)
-        ) {
-            GenericTextField(
-                value = stringToPairGetIndex(targetCurrencyName, 1),
+        Column(modifier = modifier
+            .constrainAs(targetCurrencyTF) {
+                top.linkTo(initialCurrencyTF.bottom)
+            }
+            .fillMaxWidth()
+            .padding(8.dp)) {
+            GenericTextField(value = stringToPairGetIndex(targetCurrencyName, 1),
                 modifier = modifier,
                 currencyList = currencyList,
                 isKeyTypeNumOnly = false,
                 label = stringResource(id = R.string.target_currency),
-                onValueChange = { targetCurrencyName = it }
-            )
+                onValueChange = { targetCurrencyName = it })
         }
 
         FloatingActionButton(
-            modifier = Modifier
-                .constrainAs(reverseIcon) {
+            modifier = Modifier.constrainAs(reverseIcon) {
                     top.linkTo(targetCurrencyTF.bottom)
                     end.linkTo(parent.end)
                     start.linkTo(parent.start)
@@ -132,13 +130,11 @@ fun MainScreen(
             )
         }
 
-        GenericTextField(
-            label = if (initialCurrencyName.isNotBlank()) stringResource(id = R.string.amount) + " of " + stringToPairGetIndex(
-                initialCurrencyName,
-                returnIndex = 1
-            ) else stringResource(
-                id = R.string.amount
-            ),
+        GenericTextField(label = if (initialCurrencyName.isNotBlank()) stringResource(id = R.string.amount) + " of " + stringToPairGetIndex(
+            initialCurrencyName, returnIndex = 1
+        ) + "s" else stringResource(
+            id = R.string.amount
+        ),
             value = initialCurrencyAmount,
             modifier = modifier
                 .constrainAs(amountTF) {
@@ -160,12 +156,8 @@ fun MainScreen(
                     initialCurrencyAmount.toDouble()
                 ).collect {
                     currency = it
-                    targetCurrencyAmount = if
-                                                   (initialCurrencyName.isNotBlank()
-                        && targetCurrencyName.isNotBlank()
-                        && initialCurrencyName.isNotBlank()
-                    )
-                        currency.new_amount.toString() else ""
+                    targetCurrencyAmount =
+                        if (initialCurrencyName.isNotBlank() && targetCurrencyName.isNotBlank() && initialCurrencyName.isNotBlank()) currency.new_amount.toString() else ""
                 }
             }
         }
@@ -187,14 +179,15 @@ fun MainScreen(
             Text(
                 modifier = Modifier.padding(16.dp),
 
-                text = "Value: $targetCurrencyAmount ${
-                    stringToPairGetIndex(
-                        targetCurrencyName,
-                        returnIndex = 1
-                    )
-                }",
+                text = if (initialCurrencyName.isNotBlank() && targetCurrencyName.isNotBlank() && initialCurrencyAmount.isNotBlank()) {
+                    "$targetCurrencyAmount ${
+                        stringToPairGetIndex(
+                            targetCurrencyName, returnIndex = 1
+                        )
+                    }s"
+                } else "Result",
                 color = Color.White,
-                fontSize = 24.sp
+                fontSize = 24.sp,
             )
         }
     }

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">CurrencyConverter</string>
-    <string name="initial_currency">Initial currency</string>
-    <string name="target_currency">Target currency</string>
+    <string name="initial_currency">From</string>
+    <string name="target_currency">To</string>
     <string name="amount">Amount</string>
     <string name="value">Value</string>
     <string name="title">Currency Converter</string>

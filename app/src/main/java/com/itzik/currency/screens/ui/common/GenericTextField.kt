@@ -93,7 +93,7 @@ fun GenericTextField(
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Black,
-            focusedLabelColor = colorResource(id = R.color.standard_purple)
+            focusedLabelColor = colorResource(id = R.color.red)
         )
     )
 
