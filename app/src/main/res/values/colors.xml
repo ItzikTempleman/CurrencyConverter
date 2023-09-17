@@ -13,13 +13,14 @@
     <color name="blue">#026B9B</color>
     <color name="yellow">#f7d284</color>
     <color name="green">#4CAF50</color>
-    <color name="orange">#fba024</color>
+    <color name="orange">#fba223</color>
     <color name="transparent">#00EAEAEA</color>
     <color name="almost_transparent">#34FFFFFF</color>
     <color name="semi_transparent">#74FFFFFF</color>
     <color name="grey">#454545</color>
     <color name="lighter_grey">#A8A7A7</color>
     <color name="lighter_grey_2">#A8A8A8</color>
+    <color name="army_green">#84a31b</color>
     <color name="light_grey">#EAEAEA</color>
     <color name="dark_green">#25352A</color>
     <color name="blue_green">#1D4D59</color>

@@ -1,7 +1,6 @@
 package com.itzik.currency.screens
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.FloatingActionButtonElevation
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -26,8 +26,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.material.Icon
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.itzik.currency.R
 import com.itzik.currency.constants.getCurrencyNames
@@ -58,7 +60,7 @@ fun MainScreen(
     CustomImage()
 
     ConstraintLayout(modifier = modifier.fillMaxSize()) {
-        val (logo, title, initialCurrencyTF, targetCurrencyTF, amountTF, reverseIcon, calcBtn, valueText) = createRefs()
+        val (logo, title, initialCurrencyTF, targetCurrencyTF, amountTF, reverseIcon, valueText) = createRefs()
 
 
 
@@ -81,7 +83,7 @@ fun MainScreen(
 
             style = TextStyle(
                 fontWeight = FontWeight.Bold, fontSize = 24.sp, fontFamily = FontFamily.Monospace
-            ), text = stringResource(id = R.string.title), color = Color.Black)
+            ), text = stringResource(id = R.string.title), color = colorResource(id = R.color.white))
 
         Column(modifier = modifier
             .constrainAs(initialCurrencyTF) {
@@ -119,6 +121,7 @@ fun MainScreen(
 
         GenericFloatingActionButton(
             modifier = Modifier
+                .zIndex(-100f)
                 .constrainAs(reverseIcon) {
                     top.linkTo(targetCurrencyTF.bottom)
                     end.linkTo(parent.end)
@@ -129,10 +132,10 @@ fun MainScreen(
                 initialCurrencyName = targetCurrencyName
                 targetCurrencyName = temp
             },
-            backgroundColor = Color.White,
+            backgroundColor = colorResource(id = R.color.orange),
             painter = painterResource(id = R.drawable.swapvert),
             contentDescription = null,
-            tint = colorResource(id = R.color.turquoise)
+            tint = colorResource(id = R.color.white)
         )
 
 
@@ -155,10 +158,10 @@ fun MainScreen(
         )
 
         Card(
+            backgroundColor = colorResource(id = R.color.toolbar_blue),
+            elevation = 80.dp,
+            modifier = Modifier
 
-            backgroundColor = Color.White,
-            elevation = 40.dp,
-            modifier = modifier
                 .constrainAs(valueText) {
                     top.linkTo(amountTF.bottom)
                 }
@@ -169,40 +172,31 @@ fun MainScreen(
                 )
                 .wrapContentHeight(),
         ) {
-            ConstraintLayout(
-                modifier = Modifier
-                    .border(
-                        color = colorResource(id = R.color.turquoise),
-                        width = 2.dp,
-                        shape = RoundedCornerShape(12.dp)
+            ConstraintLayout(modifier = Modifier.clickable {
+                if (isFieldsEmpty(
+                        initialCurrencyName,
+                        targetCurrencyName,
+                        initialCurrencyAmount
                     )
-                    .fillMaxWidth()
-                    .clickable {
-                        if (isFieldsEmpty(
-                                initialCurrencyName,
-                                targetCurrencyName,
-                                initialCurrencyAmount
+                ) {
+                    coroutineScope.launch {
+                        currencyViewModel
+                            .getCurrency(
+                                stringToPairGetIndex(initialCurrencyName, 0),
+                                stringToPairGetIndex(targetCurrencyName, 0),
+                                initialCurrencyAmount.toDouble()
                             )
-                        ) {
-                            coroutineScope.launch {
-                                currencyViewModel
-                                    .getCurrency(
-                                        stringToPairGetIndex(initialCurrencyName, 0),
-                                        stringToPairGetIndex(targetCurrencyName, 0),
-                                        initialCurrencyAmount.toDouble()
+                            .collect {
+                                currency = it
+                                targetCurrencyAmount = if (isFieldsEmpty(
+                                        initialCurrencyName,
+                                        targetCurrencyName
                                     )
-                                    .collect {
-                                        currency = it
-                                        targetCurrencyAmount = if (isFieldsEmpty(
-                                                initialCurrencyName,
-                                                targetCurrencyName
-                                            )
-                                        ) currency.new_amount.toString() else ""
-                                    }
+                                ) currency.new_amount.toString() else ""
                             }
-                        }
                     }
-            ) {
+                }
+            }) {
                 val (text, click) = createRefs()
                 Text(
                     modifier = Modifier
@@ -225,7 +219,7 @@ fun MainScreen(
                             )
                         }s"
                     } else "Convert",
-                    color = colorResource(id = R.color.turquoise),
+                    color = colorResource(id = R.color.white),
                     fontSize = 18.sp,
                 )
 
@@ -239,7 +233,7 @@ fun MainScreen(
                         },
                     painter = painterResource(id = R.drawable.convert),
                     contentDescription = null,
-                    tint = colorResource(id = R.color.turquoise)
+                    tint = colorResource(id = R.color.white)
                 )
             }
         }

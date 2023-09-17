@@ -1,7 +1,6 @@
 package com.itzik.currency.screens.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,36 +19,24 @@ import com.itzik.currency.R
 @Composable
 fun CustomImage() {
 
-    val turquoise = colorResource(id = R.color.turquoise)
-    val lightPink = colorResource(id = R.color.light_pink)
-    val white = colorResource(id = R.color.white)
-    val lightTeal = colorResource(id = R.color.light_teal)
+    val orange = colorResource(id = R.color.orange)
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(lightTeal, white),
-                    startY = 0f,
-                    endY = Float.POSITIVE_INFINITY
-                )
-            )
+            .background(Color.White)
     ) {}
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(600.dp).padding(8.dp)
+            .height(600.dp)
             .graphicsLayer(
-                shape = RoundedCornerShape(30.dp),
+                shape = RoundedCornerShape(bottomStart = 50.dp, bottomEnd =  50.dp),
                 clip = true
             )
             .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(turquoise, lightPink),
-                    startY = 0f,
-                    endY = Float.POSITIVE_INFINITY
-                )
+                orange
             )
     ) {}
 }
