@@ -13,7 +13,7 @@ fun GenericFloatingActionButton(
     modifier: Modifier,
     onClick: () -> Unit,
     backgroundColor: Color,
-    shape: Shape,
+
     painter: Painter,
     contentDescription: String?,
     tint: Color,
@@ -21,8 +21,7 @@ fun GenericFloatingActionButton(
     FloatingActionButton(
         modifier = modifier,
         onClick = onClick,
-        backgroundColor = backgroundColor,
-        shape = shape
+        backgroundColor = backgroundColor
     ) {
         Icon(
             painter = painter,
