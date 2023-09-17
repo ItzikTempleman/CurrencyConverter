@@ -1,4 +1,4 @@
-package com.itzik.currency.screens.ui.common
+package com.itzik.currency.screens.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

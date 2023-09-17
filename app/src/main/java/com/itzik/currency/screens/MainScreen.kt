@@ -33,8 +33,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.itzik.currency.R
 import com.itzik.currency.constants.getCurrencyNames
 import com.itzik.currency.models.CurrencyResponse
-
-import com.itzik.currency.screens.ui.common.CustomImage
+import com.itzik.currency.screens.ui.CustomImage
 import com.itzik.currency.screens.ui.common.GenericTextField
 import com.itzik.currency.utils.stringToPairGetIndex
 import com.itzik.currency.viewmodels.CurrencyViewModel
@@ -55,10 +54,11 @@ fun MainScreen(
     var initialCurrencyAmount by remember { mutableStateOf("") }
     var targetCurrencyAmount by remember { mutableStateOf("") }
 
+
     CustomImage()
 
     ConstraintLayout(modifier = modifier.fillMaxSize()) {
-        val (logo, title, initialCurrencyTF, targetCurrencyTF, amountTF,calcBtn, valueText, reverseIcon) = createRefs()
+        val (logo, title, initialCurrencyTF, targetCurrencyTF, amountTF, calcBtn, valueText, reverseIcon) = createRefs()
 
 
 
@@ -89,12 +89,15 @@ fun MainScreen(
             }
             .fillMaxWidth()
             .padding(start = 8.dp, end = 8.dp, top = 100.dp)) {
-            GenericTextField(value = stringToPairGetIndex(initialCurrencyName, 1),
+            GenericTextField(
+                value = stringToPairGetIndex(initialCurrencyName, 1),
                 modifier = modifier,
                 currencyList = currencyList,
                 isKeyTypeNumOnly = false,
                 label = stringResource(id = R.string.initial_currency),
-                onValueChange = { initialCurrencyName = it })
+                onValueChange = { initialCurrencyName = it }
+            )
+
         }
 
         Column(modifier = modifier
@@ -103,23 +106,28 @@ fun MainScreen(
             }
             .fillMaxWidth()
             .padding(8.dp)) {
-            GenericTextField(value = stringToPairGetIndex(targetCurrencyName, 1),
+            GenericTextField(
+                value = stringToPairGetIndex(targetCurrencyName, 1),
                 modifier = modifier,
                 currencyList = currencyList,
                 isKeyTypeNumOnly = false,
                 label = stringResource(id = R.string.target_currency),
-                onValueChange = { targetCurrencyName = it })
+                onValueChange = { targetCurrencyName = it }
+
+            )
         }
 
         FloatingActionButton(
             modifier = Modifier.constrainAs(reverseIcon) {
-                    top.linkTo(targetCurrencyTF.bottom)
-                    end.linkTo(parent.end)
-                    start.linkTo(parent.start)
-                },
+                top.linkTo(targetCurrencyTF.bottom)
+                end.linkTo(parent.end)
+                start.linkTo(parent.start)
+            },
 
             onClick = {
-
+                val temp = initialCurrencyName
+                initialCurrencyName = targetCurrencyName
+                targetCurrencyName = temp
             },
             backgroundColor = colorResource(id = R.color.standard_purple),
             shape = RoundedCornerShape(90.dp),
@@ -146,7 +154,6 @@ fun MainScreen(
             currencyList = currencyList,
             isKeyTypeNumOnly = true,
             onValueChange = { initialCurrencyAmount = it }
-
         )
 
         Button(onClick = {
@@ -164,13 +171,13 @@ fun MainScreen(
                 }
             }
         },
-        modifier=Modifier.constrainAs(calcBtn){
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-            top.linkTo(amountTF.bottom)
-        }
+            modifier = Modifier.constrainAs(calcBtn) {
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                top.linkTo(amountTF.bottom)
+            }
 
-            ) {
+        ) {
 
         }
 

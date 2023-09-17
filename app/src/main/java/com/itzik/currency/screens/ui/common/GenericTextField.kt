@@ -40,7 +40,7 @@ fun GenericTextField(
     currencyList: List<Pair<String, String>>,
     isKeyTypeNumOnly: Boolean,
 ) {
-    val pattern = remember { Regex("^\\d+\$") }
+
 
     var selectedItem by remember { mutableStateOf("") }
     var isContextMenuVisible by rememberSaveable { mutableStateOf(false) }
@@ -58,19 +58,16 @@ fun GenericTextField(
         keyboardOptions = if (isKeyTypeNumOnly) KeyboardOptions(keyboardType = KeyboardType.Number) else KeyboardOptions(
             keyboardType = KeyboardType.Text
         ),
-        shape = RoundedCornerShape(32.dp),
+        shape = RoundedCornerShape(10.dp),
         singleLine = true,
         textStyle = TextStyle(fontSize = 20.sp),
         value = value,
         onValueChange = {
-            if (isKeyTypeNumOnly) {
-                if (it.matches(pattern)) {
-                    onValueChange(it)
-                }
-            } else onValueChange(it)
+            onValueChange(it)
         },
 
         modifier = modifier
+
             .padding(vertical = 2.dp, horizontal = 12.dp)
             .fillMaxWidth(),
         label = {
@@ -89,11 +86,11 @@ fun GenericTextField(
         colors = TextFieldDefaults.textFieldColors(
             cursorColor = Color.Black,
             textColor = Color.Black,
-            backgroundColor = colorResource(id = R.color.very_light__purple),
+            backgroundColor = Color.White,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Black,
-            focusedLabelColor = colorResource(id = R.color.red)
+            focusedLabelColor = colorResource(id = R.color.black)
         )
     )
 
