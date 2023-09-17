@@ -9,9 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,6 +31,7 @@ import com.itzik.currency.R
 import com.itzik.currency.constants.getCurrencyNames
 import com.itzik.currency.models.CurrencyResponse
 import com.itzik.currency.screens.ui.CustomImage
+import com.itzik.currency.screens.ui.common.GenericFloatingActionButton
 import com.itzik.currency.screens.ui.common.GenericTextField
 import com.itzik.currency.utils.stringToPairGetIndex
 import com.itzik.currency.viewmodels.CurrencyViewModel
@@ -54,11 +52,10 @@ fun MainScreen(
     var initialCurrencyAmount by remember { mutableStateOf("") }
     var targetCurrencyAmount by remember { mutableStateOf("") }
 
-
     CustomImage()
 
     ConstraintLayout(modifier = modifier.fillMaxSize()) {
-        val (logo, title, initialCurrencyTF, targetCurrencyTF, amountTF, calcBtn, valueText, reverseIcon) = createRefs()
+        val (logo, title, initialCurrencyTF, targetCurrencyTF, amountTF, reverseIcon, calcBtn, valueText) = createRefs()
 
 
 
@@ -117,13 +114,12 @@ fun MainScreen(
             )
         }
 
-        FloatingActionButton(
+        GenericFloatingActionButton(
             modifier = Modifier.constrainAs(reverseIcon) {
                 top.linkTo(targetCurrencyTF.bottom)
                 end.linkTo(parent.end)
                 start.linkTo(parent.start)
             },
-
             onClick = {
                 val temp = initialCurrencyName
                 initialCurrencyName = targetCurrencyName
@@ -131,13 +127,39 @@ fun MainScreen(
             },
             backgroundColor = colorResource(id = R.color.standard_purple),
             shape = RoundedCornerShape(90.dp),
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.swapvert),
-                contentDescription = null,
-                tint = Color.White
-            )
-        }
+            painter = painterResource(id = R.drawable.swapvert),
+            contentDescription = null,
+            tint = Color.White
+        )
+
+        GenericFloatingActionButton(
+            modifier = Modifier
+                .constrainAs(calcBtn) {
+                    top.linkTo(targetCurrencyTF.bottom)
+                    end.linkTo(parent.end)
+                }
+                .padding(horizontal = 20.dp),
+            onClick = {
+                if (initialCurrencyName.isNotBlank() && targetCurrencyName.isNotBlank() && initialCurrencyAmount.isNotBlank()) {
+                    coroutineScope.launch {
+                        currencyViewModel.getCurrency(
+                            stringToPairGetIndex(initialCurrencyName, 0),
+                            stringToPairGetIndex(targetCurrencyName, 0),
+                            initialCurrencyAmount.toDouble()
+                        ).collect {
+                            currency = it
+                            targetCurrencyAmount =
+                                if (initialCurrencyName.isNotBlank() && targetCurrencyName.isNotBlank() && initialCurrencyName.isNotBlank()) currency.new_amount.toString() else ""
+                        }
+                    }
+                }
+            },
+            backgroundColor = colorResource(id = R.color.standard_purple),
+            shape = RoundedCornerShape(90.dp),
+            painter = painterResource(id = R.drawable.baseline_keyboard_double_arrow_right_24),
+            contentDescription = null,
+            tint = Color.White
+        )
 
         GenericTextField(label = if (initialCurrencyName.isNotBlank()) stringResource(id = R.string.amount) + " of " + stringToPairGetIndex(
             initialCurrencyName, returnIndex = 1
@@ -156,36 +178,10 @@ fun MainScreen(
             onValueChange = { initialCurrencyAmount = it }
         )
 
-        Button(onClick = {
-            if (initialCurrencyName.isNotBlank() && targetCurrencyName.isNotBlank() && initialCurrencyAmount.isNotBlank()) {
-                coroutineScope.launch {
-                    currencyViewModel.getCurrency(
-                        stringToPairGetIndex(initialCurrencyName, 0),
-                        stringToPairGetIndex(targetCurrencyName, 0),
-                        initialCurrencyAmount.toDouble()
-                    ).collect {
-                        currency = it
-                        targetCurrencyAmount =
-                            if (initialCurrencyName.isNotBlank() && targetCurrencyName.isNotBlank() && initialCurrencyName.isNotBlank()) currency.new_amount.toString() else ""
-                    }
-                }
-            }
-        },
-            modifier = Modifier.constrainAs(calcBtn) {
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                top.linkTo(amountTF.bottom)
-            }
-
-        ) {
-
-        }
-
-
         Box(
             modifier = modifier
                 .constrainAs(valueText) {
-                    top.linkTo(calcBtn.bottom)
+                    top.linkTo(amountTF.bottom)
                 }
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp, vertical = 12.dp)
@@ -195,8 +191,7 @@ fun MainScreen(
                 .height(60.dp)
                 .background(colorResource(id = R.color.standard_purple)),
         ) {
-
-
+            
             Text(
                 modifier = Modifier.padding(16.dp),
 
