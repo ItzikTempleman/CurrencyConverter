@@ -29,7 +29,7 @@ fun CustomImage() {
         Box(
             modifier = Modifier
                 .fillMaxWidth().height(30.dp)
-                .background(color = colorResource(id = R.color.strong_yellow))
+                .background(color = colorResource(id = R.color.light_yellow))
         ) {        }
     }
 

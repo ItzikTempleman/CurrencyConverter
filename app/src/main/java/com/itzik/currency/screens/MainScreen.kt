@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -57,7 +58,7 @@ fun MainScreen(
     CustomImage()
 
     ConstraintLayout(modifier = modifier.fillMaxSize()) {
-        val (logo, title, initialCurrencyTF, targetCurrencyTF, amountTF, valueText, reverseIcon) = createRefs()
+        val (logo, title, initialCurrencyTF, targetCurrencyTF, amountTF,calcBtn, valueText, reverseIcon) = createRefs()
 
 
 
@@ -148,23 +149,36 @@ fun MainScreen(
 
         )
 
-        if (initialCurrencyName.isNotBlank() && targetCurrencyName.isNotBlank() && initialCurrencyAmount.isNotBlank()) {
-            coroutineScope.launch {
-                currencyViewModel.getCurrency(
-                    stringToPairGetIndex(initialCurrencyName, 0),
-                    stringToPairGetIndex(targetCurrencyName, 0),
-                    initialCurrencyAmount.toDouble()
-                ).collect {
-                    currency = it
-                    targetCurrencyAmount =
-                        if (initialCurrencyName.isNotBlank() && targetCurrencyName.isNotBlank() && initialCurrencyName.isNotBlank()) currency.new_amount.toString() else ""
+        Button(onClick = {
+            if (initialCurrencyName.isNotBlank() && targetCurrencyName.isNotBlank() && initialCurrencyAmount.isNotBlank()) {
+                coroutineScope.launch {
+                    currencyViewModel.getCurrency(
+                        stringToPairGetIndex(initialCurrencyName, 0),
+                        stringToPairGetIndex(targetCurrencyName, 0),
+                        initialCurrencyAmount.toDouble()
+                    ).collect {
+                        currency = it
+                        targetCurrencyAmount =
+                            if (initialCurrencyName.isNotBlank() && targetCurrencyName.isNotBlank() && initialCurrencyName.isNotBlank()) currency.new_amount.toString() else ""
+                    }
                 }
             }
+        },
+        modifier=Modifier.constrainAs(calcBtn){
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+            top.linkTo(amountTF.bottom)
         }
+
+            ) {
+
+        }
+
+
         Box(
             modifier = modifier
                 .constrainAs(valueText) {
-                    top.linkTo(amountTF.bottom)
+                    top.linkTo(calcBtn.bottom)
                 }
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp, vertical = 12.dp)
