@@ -22,19 +22,26 @@ fun CustomImage() {
 
     val turquoise = colorResource(id = R.color.turquoise)
     val lightPink = colorResource(id = R.color.light_pink)
-
+    val white = colorResource(id = R.color.white)
+    val lightTeal = colorResource(id = R.color.light_teal)
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.White)
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(lightTeal, white),
+                    startY = 0f,
+                    endY = Float.POSITIVE_INFINITY
+                )
+            )
     ) {}
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(600.dp).padding(4.dp)
+            .height(600.dp).padding(8.dp)
             .graphicsLayer(
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(30.dp),
                 clip = true
             )
             .background(
@@ -44,9 +51,7 @@ fun CustomImage() {
                     endY = Float.POSITIVE_INFINITY
                 )
             )
-    ) {
-
-    }
+    ) {}
 }
 
 

@@ -1,6 +1,7 @@
 package com.itzik.currency.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -128,10 +129,10 @@ fun MainScreen(
                 initialCurrencyName = targetCurrencyName
                 targetCurrencyName = temp
             },
-            backgroundColor = colorResource(id = R.color.turquoise),
+            backgroundColor = Color.White,
             painter = painterResource(id = R.drawable.swapvert),
             contentDescription = null,
-            tint = Color.Black
+            tint = colorResource(id = R.color.turquoise)
         )
 
 
@@ -155,7 +156,7 @@ fun MainScreen(
 
         Card(
 
-            backgroundColor = colorResource(id = R.color.turquoise),
+            backgroundColor = Color.White,
             elevation = 40.dp,
             modifier = modifier
                 .constrainAs(valueText) {
@@ -170,6 +171,11 @@ fun MainScreen(
         ) {
             ConstraintLayout(
                 modifier = Modifier
+                    .border(
+                        color = colorResource(id = R.color.turquoise),
+                        width = 2.dp,
+                        shape = RoundedCornerShape(12.dp)
+                    )
                     .fillMaxWidth()
                     .clickable {
                         if (isFieldsEmpty(
@@ -219,7 +225,7 @@ fun MainScreen(
                             )
                         }s"
                     } else "Convert",
-                    color = Color.Black,
+                    color = colorResource(id = R.color.turquoise),
                     fontSize = 18.sp,
                 )
 
@@ -233,7 +239,7 @@ fun MainScreen(
                         },
                     painter = painterResource(id = R.drawable.convert),
                     contentDescription = null,
-                    tint = Color.Black
+                    tint = colorResource(id = R.color.turquoise)
                 )
             }
         }
