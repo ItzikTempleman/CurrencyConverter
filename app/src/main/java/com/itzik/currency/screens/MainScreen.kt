@@ -5,8 +5,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.FloatingActionButtonElevation
@@ -126,7 +129,7 @@ fun MainScreen(
                     top.linkTo(targetCurrencyTF.bottom)
                     end.linkTo(parent.end)
                 }
-                .padding(horizontal = 30.dp),
+                .padding(horizontal = 24.dp, vertical = 8.dp),
             onClick = {
                 val temp = initialCurrencyName
                 initialCurrencyName = targetCurrencyName
@@ -140,18 +143,12 @@ fun MainScreen(
 
 
 
-        GenericTextField(label = if (initialCurrencyName.isNotBlank()) stringResource(id = R.string.amount) + " of " + stringToPairGetIndex(
-            initialCurrencyName, returnIndex = 1
-        ) + "s" else stringResource(
-            id = R.string.amount
-        ),
+        GenericTextField(
+            label = if (initialCurrencyName.isNotBlank()) stringResource(id = R.string.amount) + " of " + stringToPairGetIndex(initialCurrencyName, returnIndex = 1) + "s" else "How much?",
             value = initialCurrencyAmount,
-            modifier = modifier
-                .constrainAs(amountTF) {
-                    top.linkTo(reverseIcon.bottom)
-                }
-                .fillMaxWidth()
-                .padding(8.dp),
+            modifier = modifier.constrainAs(amountTF) {
+                top.linkTo(targetCurrencyTF.bottom)
+                start.linkTo(parent.start) }.wrapContentWidth().width(230.dp).padding(horizontal = 8.dp),
             currencyList = currencyList,
             isKeyTypeNumOnly = true,
             onValueChange = { initialCurrencyAmount = it }
@@ -164,11 +161,12 @@ fun MainScreen(
 
                 .constrainAs(valueText) {
                     top.linkTo(amountTF.bottom)
+                    bottom.linkTo(parent.bottom)
                 }
                 .fillMaxWidth()
-                .padding(horizontal = 50.dp, vertical = 110.dp)
+                .padding(horizontal = 50.dp)
                 .clip(
-                    RoundedCornerShape(10.dp)
+                    RoundedCornerShape(20.dp)
                 )
                 .wrapContentHeight(),
         ) {
