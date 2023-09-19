@@ -30,6 +30,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.material.Icon
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -79,14 +80,14 @@ fun MainScreen(
             .constrainAs(title) {
                 top.linkTo(logo.top)
                 bottom.linkTo(logo.bottom)
-                start.linkTo(parent.start)
+                start.linkTo(logo.end)
                 end.linkTo(parent.end)
             }
             .padding(top = 12.dp),
 
             style = TextStyle(
-                fontWeight = FontWeight.Bold, fontSize = 24.sp, fontFamily = FontFamily.Monospace
-            ), text = stringResource(id = R.string.title), color = colorResource(id = R.color.white))
+                fontWeight = FontWeight.Bold, fontSize = 26.sp, fontFamily = FontFamily.Monospace
+            ), text = stringResource(id = R.string.title), color = colorResource(id = R.color.dark_blue_grey))
 
         Column(modifier = modifier
             .constrainAs(initialCurrencyTF) {
@@ -110,7 +111,8 @@ fun MainScreen(
                 top.linkTo(initialCurrencyTF.bottom)
             }
             .fillMaxWidth()
-            .padding(8.dp)) {
+            .padding(8.dp)
+            ) {
             GenericTextField(
                 value = stringToPairGetIndex(targetCurrencyName, 1),
                 modifier = modifier,
@@ -144,7 +146,9 @@ fun MainScreen(
 
 
         GenericTextField(
-            label = if (initialCurrencyName.isNotBlank()) stringResource(id = R.string.amount) + " of " + stringToPairGetIndex(initialCurrencyName, returnIndex = 1) + "s" else "How much?",
+            label = if (initialCurrencyName.isNotBlank()){
+                stringResource(id = R.string.amount)  + stringToPairGetIndex(initialCurrencyName, returnIndex = 1) + "s"
+            } else stringResource(id = R.string.amount),
             value = initialCurrencyAmount,
             modifier = modifier.constrainAs(amountTF) {
                 top.linkTo(targetCurrencyTF.bottom)

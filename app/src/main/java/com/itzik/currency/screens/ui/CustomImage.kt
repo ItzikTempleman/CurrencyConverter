@@ -18,20 +18,30 @@ import com.itzik.currency.R
 fun CustomImage() {
 
     val orange = colorResource(id = R.color.orange)
-    val lightGrey = colorResource(id = R.color.lighter_grey)
-    val purple = colorResource(id = R.color.light_purple)
-    val yellowOrange = colorResource(id = R.color.yellow)
+    val yellow = colorResource(id = R.color.yellow)
+    val lightYellow = colorResource(id = R.color.yellow)
     val white = colorResource(id = R.color.white)
 
-    val mainColors = listOf(orange, yellowOrange)
-    val backGroundColors = listOf(white, purple)
 
-    val brush = Brush.horizontalGradient(mainColors)
-    val brush2 = Brush.horizontalGradient(backGroundColors)
+    val brush = Brush.horizontalGradient(listOf(orange, yellow))
+    val brush2 = Brush.verticalGradient(listOf(lightYellow, yellow))
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(brush2)
+            .background(white)
+    ) {}
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(350.dp)
+            .graphicsLayer(
+                clip = true
+            )
+            .background(
+                brush2
+            )
     ) {}
 
     Box(
@@ -39,13 +49,14 @@ fun CustomImage() {
             .fillMaxWidth()
             .height(615.dp)
             .graphicsLayer(
-                shape = RoundedCornerShape(bottomStart = 60.dp, bottomEnd = 60.dp),
+                shape = RoundedCornerShape(bottomStart = 60.dp, bottomEnd = 60.dp, topEnd = 350.dp),
                 clip = true
             )
             .background(
                 brush
             )
     ) {}
+
 }
 
 
