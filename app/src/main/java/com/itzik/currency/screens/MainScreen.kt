@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -34,6 +33,7 @@ import com.itzik.currency.R
 import com.itzik.currency.constants.getCurrencyNames
 import com.itzik.currency.models.CurrencyResponse
 import com.itzik.currency.screens.ui.CustomImage
+import com.itzik.currency.screens.ui.common.GenericCardText
 import com.itzik.currency.screens.ui.common.GenericFloatingActionButton
 import com.itzik.currency.screens.ui.common.GenericTextField
 import com.itzik.currency.utils.isFieldsEmpty
@@ -59,9 +59,9 @@ fun MainScreen(
     CustomImage()
 
     ConstraintLayout(modifier = modifier.fillMaxSize()) {
-        val (logo, title, initialCurrencyTF, targetCurrencyTF, amountTF, reverseIcon, convertButton, valueText) = createRefs()
+        val (logo, title, initialCurrencyTF, targetCurrencyTF, amountTF, reverseIcon, convertButton, valueShape) = createRefs()
 
-
+        val (text, click, result) = createRefs()
 
         Image(modifier = Modifier
             .constrainAs(logo) {
@@ -140,13 +140,11 @@ fun MainScreen(
             tint = colorResource(id = R.color.white)
         )
 
-
-
         GenericTextField(
             label = if (initialCurrencyName.isNotBlank()) {
-                stringResource(id = R.string.amount) + stringToPairGetIndex(
+                stringResource(id = R.string.amount) + " " + stringToPairGetIndex(
                     initialCurrencyName,
-                    returnIndex = 1
+                    returnIndex = 0
                 ) + "s"
             } else stringResource(id = R.string.amount),
             value = initialCurrencyAmount,
@@ -156,18 +154,16 @@ fun MainScreen(
                     start.linkTo(parent.start)
                 }
                 .wrapContentWidth()
-                .width(230.dp)
+                .width(270.dp)
                 .padding(horizontal = 8.dp),
             currencyList = currencyList,
             isKeyTypeNumOnly = true,
             onValueChange = { initialCurrencyAmount = it }
         )
 
-        Card(
+        GenericCardText(
             backgroundColor = colorResource(id = R.color.toolbar_blue),
-            elevation = 80.dp,
             modifier = Modifier
-
                 .constrainAs(convertButton) {
                     top.linkTo(amountTF.bottom)
                 }
@@ -177,8 +173,7 @@ fun MainScreen(
                     RoundedCornerShape(20.dp)
                 )
                 .wrapContentHeight(),
-        ) {
-            ConstraintLayout(modifier = Modifier.clickable {
+            constraintModifier = Modifier.clickable {
                 if (isFieldsEmpty(
                         initialCurrencyName,
                         targetCurrencyName,
@@ -202,57 +197,71 @@ fun MainScreen(
                             }
                     }
                 }
-            }) {
-                val (text, click) = createRefs()
-                Text(
-                    modifier = Modifier
-                        .constrainAs(text) {
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
-                            top.linkTo(parent.top)
-                            bottom.linkTo(parent.bottom)
-                        }
-                        .padding(16.dp),
-                    text = stringResource(id = R.string.convert),
-                    color = colorResource(id = R.color.white),
-                    fontSize = 18.sp,
-                )
+            },
+            textModifier = Modifier
+                .constrainAs(text) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                }
+                .padding(16.dp),
+            text = stringResource(id = R.string.convert),
+            textColor = colorResource(id = R.color.white),
+            fontSize = 20.sp,
+            iconModifier = Modifier
+                .padding(horizontal = 16.dp)
+                .constrainAs(click) {
+                    end.linkTo(parent.end)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                },
+            painter = painterResource(id = R.drawable.convert),
+            contentDescription = null,
+            tint = colorResource(id = R.color.white)
 
-                Icon(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .constrainAs(click) {
-                            end.linkTo(parent.end)
-                            top.linkTo(parent.top)
-                            bottom.linkTo(parent.bottom)
-                        },
-                    painter = painterResource(id = R.drawable.convert),
-                    contentDescription = null,
-                    tint = colorResource(id = R.color.white)
-                )
-            }
-        }
+        )
 
-        Text(
+
+        GenericCardText(
+            backgroundColor = Color.White,
             modifier = Modifier
-                .constrainAs(valueText) {
+                .constrainAs(valueShape) {
                     top.linkTo(convertButton.bottom)
                 }
                 .fillMaxWidth()
-                .padding(50.dp),
+                .padding(50.dp)
+                .clip(
+                    RoundedCornerShape(20.dp)
+                )
+                .wrapContentHeight(),
+            constraintModifier = Modifier,
+            textModifier = Modifier.constrainAs(result) {
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                top.linkTo(parent.top)
+                bottom.linkTo(parent.bottom)
+            }.padding(16.dp),
             text = if (isFieldsEmpty(
                     initialCurrencyName,
                     targetCurrencyName,
                     initialCurrencyAmount
                 )
             ) {
-                "$targetCurrencyAmount ${
+                targetCurrencyAmount + " ${
                     stringToPairGetIndex(
-                        targetCurrencyName, returnIndex = 1
+                        targetCurrencyName,
+                        returnIndex = 0
                     )
                 }s"
-            } else "0.0",
-            fontSize = 48.sp
+            } else
+                "No value",
+            fontSize = 20.sp,
+            textColor = Color.Black,
+            iconModifier = null,
+            painter = null,
+            contentDescription = null,
+            tint = null,
         )
     }
 }
