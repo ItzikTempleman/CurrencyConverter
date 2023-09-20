@@ -5,14 +5,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.FloatingActionButtonElevation
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -22,15 +20,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.material.Icon
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -64,7 +59,7 @@ fun MainScreen(
     CustomImage()
 
     ConstraintLayout(modifier = modifier.fillMaxSize()) {
-        val (logo, title, initialCurrencyTF, targetCurrencyTF, amountTF, reverseIcon, valueText) = createRefs()
+        val (logo, title, initialCurrencyTF, targetCurrencyTF, amountTF, reverseIcon, convertButton, valueText) = createRefs()
 
 
 
@@ -87,7 +82,9 @@ fun MainScreen(
 
             style = TextStyle(
                 fontWeight = FontWeight.Bold, fontSize = 26.sp, fontFamily = FontFamily.Monospace
-            ), text = stringResource(id = R.string.title), color = colorResource(id = R.color.dark_blue_grey))
+            ),
+            text = stringResource(id = R.string.title),
+            color = colorResource(id = R.color.dark_blue_grey))
 
         Column(modifier = modifier
             .constrainAs(initialCurrencyTF) {
@@ -112,7 +109,7 @@ fun MainScreen(
             }
             .fillMaxWidth()
             .padding(8.dp)
-            ) {
+        ) {
             GenericTextField(
                 value = stringToPairGetIndex(targetCurrencyName, 1),
                 modifier = modifier,
@@ -146,13 +143,21 @@ fun MainScreen(
 
 
         GenericTextField(
-            label = if (initialCurrencyName.isNotBlank()){
-                stringResource(id = R.string.amount)  + stringToPairGetIndex(initialCurrencyName, returnIndex = 1) + "s"
+            label = if (initialCurrencyName.isNotBlank()) {
+                stringResource(id = R.string.amount) + stringToPairGetIndex(
+                    initialCurrencyName,
+                    returnIndex = 1
+                ) + "s"
             } else stringResource(id = R.string.amount),
             value = initialCurrencyAmount,
-            modifier = modifier.constrainAs(amountTF) {
-                top.linkTo(targetCurrencyTF.bottom)
-                start.linkTo(parent.start) }.wrapContentWidth().width(230.dp).padding(horizontal = 8.dp),
+            modifier = modifier
+                .constrainAs(amountTF) {
+                    top.linkTo(targetCurrencyTF.bottom)
+                    start.linkTo(parent.start)
+                }
+                .wrapContentWidth()
+                .width(230.dp)
+                .padding(horizontal = 8.dp),
             currencyList = currencyList,
             isKeyTypeNumOnly = true,
             onValueChange = { initialCurrencyAmount = it }
@@ -163,12 +168,11 @@ fun MainScreen(
             elevation = 80.dp,
             modifier = Modifier
 
-                .constrainAs(valueText) {
+                .constrainAs(convertButton) {
                     top.linkTo(amountTF.bottom)
-                    bottom.linkTo(parent.bottom)
                 }
                 .fillMaxWidth()
-                .padding(horizontal = 50.dp)
+                .padding(start = 50.dp, end = 50.dp, top = 70.dp)
                 .clip(
                     RoundedCornerShape(20.dp)
                 )
@@ -209,18 +213,7 @@ fun MainScreen(
                             bottom.linkTo(parent.bottom)
                         }
                         .padding(16.dp),
-                    text = if (isFieldsEmpty(
-                            initialCurrencyName,
-                            targetCurrencyName,
-                            initialCurrencyAmount
-                        )
-                    ) {
-                        "$targetCurrencyAmount ${
-                            stringToPairGetIndex(
-                                targetCurrencyName, returnIndex = 1
-                            )
-                        }s"
-                    } else "Convert",
+                    text = stringResource(id = R.string.convert),
                     color = colorResource(id = R.color.white),
                     fontSize = 18.sp,
                 )
@@ -239,5 +232,27 @@ fun MainScreen(
                 )
             }
         }
+
+        Text(
+            modifier = Modifier
+                .constrainAs(valueText) {
+                    top.linkTo(convertButton.bottom)
+                }
+                .fillMaxWidth()
+                .padding(50.dp),
+            text = if (isFieldsEmpty(
+                    initialCurrencyName,
+                    targetCurrencyName,
+                    initialCurrencyAmount
+                )
+            ) {
+                "$targetCurrencyAmount ${
+                    stringToPairGetIndex(
+                        targetCurrencyName, returnIndex = 1
+                    )
+                }s"
+            } else "0.0",
+            fontSize = 48.sp
+        )
     }
 }

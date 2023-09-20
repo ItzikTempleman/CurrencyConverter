@@ -26,16 +26,10 @@ fun CustomImage() {
     val brush = Brush.horizontalGradient(listOf(orange, yellow))
     val brush2 = Brush.verticalGradient(listOf(lightYellow, yellow))
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(white)
-    ) {}
 
     Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .height(350.dp)
+.fillMaxSize()
             .graphicsLayer(
                 clip = true
             )
@@ -47,7 +41,7 @@ fun CustomImage() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(615.dp)
+            .height(600.dp)
             .graphicsLayer(
                 shape = RoundedCornerShape(bottomStart = 60.dp, bottomEnd = 60.dp, topEnd = 350.dp),
                 clip = true
