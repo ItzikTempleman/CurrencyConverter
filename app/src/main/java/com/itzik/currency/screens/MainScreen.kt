@@ -36,6 +36,7 @@ import com.itzik.currency.screens.ui.CustomImage
 import com.itzik.currency.screens.ui.common.GenericCardText
 import com.itzik.currency.screens.ui.common.GenericFloatingActionButton
 import com.itzik.currency.screens.ui.common.GenericTextField
+import com.itzik.currency.utils.convertData
 import com.itzik.currency.utils.isFieldsEmpty
 import com.itzik.currency.utils.stringToPairGetIndex
 import com.itzik.currency.viewmodels.CurrencyViewModel
@@ -49,7 +50,7 @@ fun MainScreen(
     coroutineScope: CoroutineScope,
 ) {
     val currencyList = getCurrencyNames
-    var currency: CurrencyResponse
+    var currency= CurrencyResponse(0.0,"","",0.0)
 
     var initialCurrencyName by remember { mutableStateOf("") }
     var targetCurrencyName by remember { mutableStateOf("") }
@@ -180,6 +181,7 @@ fun MainScreen(
                         initialCurrencyAmount
                     )
                 ) {
+
                     coroutineScope.launch {
                         currencyViewModel
                             .getCurrency(
@@ -265,3 +267,15 @@ fun MainScreen(
         )
     }
 }
+
+
+                   /* convertData(
+                        coroutineScope =coroutineScope,
+                        currencyViewModel =currencyViewModel,
+                        currency =currency,
+                        initialCurrencyName =initialCurrencyName,
+                        targetCurrencyName =targetCurrencyName,
+                        initialCurrencyAmount =initialCurrencyAmount,
+                        targetCurrencyAmount =targetCurrencyAmount
+                    )
+                    */
