@@ -1,8 +1,11 @@
 package com.itzik.currency.screens.ui.common
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.DropdownMenu
@@ -21,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -30,6 +34,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.itzik.currency.R
+import com.itzik.currency.utils.removeParenthesis
 
 
 @Composable
@@ -101,7 +106,7 @@ fun GenericTextField(
             isContextMenuVisible = false
         },
         modifier = modifier
-            .fillMaxWidth()
+            .wrapContentWidth().clip(RoundedCornerShape(20.dp))
     ) {
         currencyList.forEach {
             DropdownMenuItem(onClick = {
@@ -109,7 +114,7 @@ fun GenericTextField(
                 isContextMenuVisible = false
                 onValueChange(selectedItem)
             }) {
-                Text(text = it.toString())
+                Text(text = removeParenthesis(it.toString()))
             }
         }
     }
