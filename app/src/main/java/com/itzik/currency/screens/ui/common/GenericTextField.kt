@@ -94,7 +94,7 @@ fun GenericTextField(
         colors = TextFieldDefaults.textFieldColors(
             cursorColor = Color.Black,
             textColor = Color.Black,
-            backgroundColor = Color.White,
+            backgroundColor =  if (icon != null) Color.Transparent else  Color.White,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Black,

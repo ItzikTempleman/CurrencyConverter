@@ -89,9 +89,10 @@ fun MainScreen(
         Column(modifier = modifier
             .constrainAs(initialCurrencyTF) {
                 top.linkTo(logo.bottom)
+                end.linkTo(parent.end)
             }
-            .fillMaxWidth()
-            .padding(start = 8.dp, end = 8.dp, top = 100.dp)) {
+            .width(80.dp)
+            .padding(end = 8.dp, top = 100.dp)) {
             GenericTextField(
                 value = stringToPairGetIndex(initialCurrencyName, 1),
                 modifier = modifier,
@@ -103,11 +104,13 @@ fun MainScreen(
 
         }
 
-        Column(modifier = modifier
+        Column(
+            modifier = modifier
             .constrainAs(targetCurrencyTF) {
                 top.linkTo(initialCurrencyTF.bottom)
+                end.linkTo(parent.end)
             }
-            .fillMaxWidth()
+            .width(80.dp)
             .padding(8.dp)
         ) {
             GenericTextField(
@@ -141,12 +144,8 @@ fun MainScreen(
         )
 
         GenericTextField(
-            label = if (initialCurrencyName.isNotBlank()) {
-                stringResource(id = R.string.amount) + " " + stringToPairGetIndex(
-                    initialCurrencyName,
-                    returnIndex = 0
-                ) + "s"
-            } else stringResource(id = R.string.amount),
+            label = stringResource(id = R.string.amount),
+
             value = initialCurrencyAmount,
             modifier = modifier
                 .constrainAs(amountTF) {
