@@ -89,10 +89,9 @@ fun MainScreen(
         Column(modifier = modifier
             .constrainAs(initialCurrencyTF) {
                 top.linkTo(logo.bottom)
-                end.linkTo(parent.end)
             }
-            .width(80.dp)
-            .padding(end = 8.dp, top = 100.dp)) {
+            .fillMaxWidth()
+            .padding(end = 8.dp, start = 8.dp, top = 100.dp)) {
             GenericTextField(
                 value = stringToPairGetIndex(initialCurrencyName, 1),
                 modifier = modifier,
@@ -108,8 +107,7 @@ fun MainScreen(
             modifier = modifier
             .constrainAs(targetCurrencyTF) {
                 top.linkTo(initialCurrencyTF.bottom)
-                end.linkTo(parent.end)
-            }
+            }  .fillMaxWidth()
             .width(80.dp)
             .padding(8.dp)
         ) {
@@ -120,7 +118,6 @@ fun MainScreen(
                 isKeyTypeNumOnly = false,
                 label = stringResource(id = R.string.target_currency),
                 onValueChange = { targetCurrencyName = it }
-
             )
         }
 

@@ -1,5 +1,6 @@
 package com.itzik.currency.screens.ui.common
 
+import android.media.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,9 +26,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,7 +47,7 @@ fun GenericTextField(
     label: String,
     modifier: Modifier,
     currencyList: List<Pair<String, String>>,
-    isKeyTypeNumOnly: Boolean,
+    isKeyTypeNumOnly: Boolean
 ) {
 
 
@@ -51,24 +56,30 @@ fun GenericTextField(
     val longCurrencyName = currencyList.map { it.second }
 
 
-    var icon: ImageVector? = null
+    var icon: Painter? = null
     if (!isKeyTypeNumOnly) {
         icon = if (isContextMenuVisible) {
-            Icons.Filled.KeyboardArrowUp
+            painterResource(id = R.drawable.close)
         } else {
-            Icons.Filled.KeyboardArrowDown
+            painterResource(id = R.drawable.arrow_down)
         }
     }
 
 
 
     OutlinedTextField(
-        keyboardOptions = if (isKeyTypeNumOnly) KeyboardOptions(keyboardType = KeyboardType.Number) else KeyboardOptions(
+        keyboardOptions = if (isKeyTypeNumOnly) 
+            KeyboardOptions(keyboardType = KeyboardType.Number) else KeyboardOptions(
             keyboardType = KeyboardType.Text
         ),
         shape = RoundedCornerShape(10.dp),
         singleLine = true,
-        textStyle = TextStyle(fontSize = 20.sp),
+        textStyle = TextStyle(
+            fontFamily = FontFamily.Monospace,
+            fontWeight = FontWeight.ExtraBold,
+            color = colorResource(id = R.color.blue),
+            fontSize = 24.sp
+        ),
         value = value,
         onValueChange = {
             onValueChange(it)
@@ -84,11 +95,15 @@ fun GenericTextField(
                 fontSize = 20.sp
             )
         },
-        trailingIcon = {
+        leadingIcon = {
             if (icon != null) {
-                Icon(icon, "", Modifier.clickable {
+                Icon(
+                    icon,
+                    null,
+                    Modifier.clickable {
                     isContextMenuVisible = !isContextMenuVisible
-                })
+                },
+                    tint = Color.DarkGray)
             }
         },
         colors = TextFieldDefaults.textFieldColors(
