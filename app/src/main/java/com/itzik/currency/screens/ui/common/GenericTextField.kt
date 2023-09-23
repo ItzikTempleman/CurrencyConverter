@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -105,8 +106,7 @@ fun GenericTextField(
         onDismissRequest = {
             isContextMenuVisible = false
         },
-        modifier = modifier
-            .wrapContentWidth().clip(RoundedCornerShape(20.dp))
+        modifier = Modifier.wrapContentWidth().height(500.dp)
     ) {
         currencyList.forEach {
             DropdownMenuItem(onClick = {

@@ -36,7 +36,6 @@ import com.itzik.currency.screens.ui.CustomImage
 import com.itzik.currency.screens.ui.common.GenericCardText
 import com.itzik.currency.screens.ui.common.GenericFloatingActionButton
 import com.itzik.currency.screens.ui.common.GenericTextField
-import com.itzik.currency.utils.convertData
 import com.itzik.currency.utils.isFieldsEmpty
 import com.itzik.currency.utils.stringToPairGetIndex
 import com.itzik.currency.viewmodels.CurrencyViewModel
@@ -50,7 +49,7 @@ fun MainScreen(
     coroutineScope: CoroutineScope,
 ) {
     val currencyList = getCurrencyNames
-    var currency= CurrencyResponse(0.0,"","",0.0)
+    var currency = CurrencyResponse(0.0, "", "", 0.0)
 
     var initialCurrencyName by remember { mutableStateOf("") }
     var targetCurrencyName by remember { mutableStateOf("") }
@@ -238,12 +237,14 @@ fun MainScreen(
                 )
                 .wrapContentHeight(),
             constraintModifier = Modifier,
-            textModifier = Modifier.constrainAs(result) {
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-            }.padding(16.dp),
+            textModifier = Modifier
+                .constrainAs(result) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                }
+                .padding(16.dp),
             text = if (isFieldsEmpty(
                     initialCurrencyName,
                     targetCurrencyName,
@@ -269,13 +270,41 @@ fun MainScreen(
 }
 
 
-                   /* convertData(
-                        coroutineScope =coroutineScope,
-                        currencyViewModel =currencyViewModel,
-                        currency =currency,
-                        initialCurrencyName =initialCurrencyName,
-                        targetCurrencyName =targetCurrencyName,
-                        initialCurrencyAmount =initialCurrencyAmount,
-                        targetCurrencyAmount =targetCurrencyAmount
-                    )
-                    */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* convertData(
+     coroutineScope =coroutineScope,
+     currencyViewModel =currencyViewModel,
+     currency =currency,
+     initialCurrencyName =initialCurrencyName,
+     targetCurrencyName =targetCurrencyName,
+     initialCurrencyAmount =initialCurrencyAmount,
+     targetCurrencyAmount =targetCurrencyAmount
+ )
+ */
