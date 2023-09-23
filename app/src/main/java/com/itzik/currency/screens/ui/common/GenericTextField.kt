@@ -1,8 +1,7 @@
 package com.itzik.currency.screens.ui.common
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -25,8 +24,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
@@ -51,6 +48,8 @@ fun GenericTextField(
 
     var selectedItem by remember { mutableStateOf("") }
     var isContextMenuVisible by rememberSaveable { mutableStateOf(false) }
+    val longCurrencyName = currencyList.map { it.second }
+
 
     var icon: ImageVector? = null
     if (!isKeyTypeNumOnly) {
@@ -60,6 +59,8 @@ fun GenericTextField(
             Icons.Filled.KeyboardArrowDown
         }
     }
+
+
 
     OutlinedTextField(
         keyboardOptions = if (isKeyTypeNumOnly) KeyboardOptions(keyboardType = KeyboardType.Number) else KeyboardOptions(
@@ -106,7 +107,8 @@ fun GenericTextField(
         onDismissRequest = {
             isContextMenuVisible = false
         },
-        modifier = Modifier.wrapContentWidth().height(500.dp)
+        modifier = Modifier
+            .wrapContentWidth()
     ) {
         currencyList.forEach {
             DropdownMenuItem(onClick = {
@@ -119,6 +121,11 @@ fun GenericTextField(
         }
     }
 }
+
+
+
+
+
 
 
 
