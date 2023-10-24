@@ -6,7 +6,8 @@ object Constants {
 
 
     const val API_KEY_NAME = "x-rapidapi-key"
-    const val API_KEY_VALUE = "370f715c6cmsh2aedaf88c0ad5bcp1aafa4jsncf895a26cb42"
+    const val API_KEY_VALUE = "1efcdfbbe9mshb72149862079f25p13b0afjsne6cce1f4c14d"
+    //const val API_KEY_VALUE = "370f715c6cmsh2aedaf88c0ad5bcp1aafa4jsncf895a26cb42"
 
 
     const val API_HOST_NAME = "x-rapidapi-host"
